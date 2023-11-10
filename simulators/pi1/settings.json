@@ -1,6 +1,10 @@
 {
-    "DHT1": {
-        "simulated": false,
+    "RDHT1": {
+        "simulated": true,
         "pin": 17
+    },
+    "RDHT2": {
+        "simulated": true,
+        "pin": 18
     }
 }
