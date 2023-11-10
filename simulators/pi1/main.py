@@ -1,3 +1,7 @@
+import threading
+
+import keyboard
+
 from db import core as db
 from dht import core as dht
 from dl import core as dl
@@ -5,6 +9,8 @@ from dms import core as dms
 from ds import core as ds
 from dus import core as dus
 from pir import core as pir
+
+from settings import load_settings
 
 
 def menu():
@@ -23,28 +29,35 @@ def menu():
 
 
 def main():
+    threads = {}
+    current_sim = ''
+    settings = load_settings()
     while True:
         option = menu()
         if option == '1':
-            ds.run('ds1')
+            ds.run('DS1')
         elif option == '2':
-            dl.run('dl')
+            dl.run('DL')
         elif option == '3':
-            dus.run('dus1')
+            dus.run('DUS1')
         elif option == '4':
-            db.run('db')
+            db.run('DB')
         elif option == '5':
-            pir.run('dpir1')
+            pir.run('DPIR1')
         elif option == '6':
-            dms.run('dms')
+            dms.run('DMS')
         elif option == '7':
-            pir.run('rpir1')
+            pir.run('RPIR1')
         elif option == '8':
-            pir.run('rpir2')
+            pir.run('RPIR2')
         elif option == '9':
-            dht.run('rdht1')
+            stop_event = threading.Event()
+            current_sim = 'RDHT1'
+            dht.run('RDHT1', threads, settings['RDHT1'], stop_event)
         elif option == '10':
-            dht.run('rdht2')
+            stop_event = threading.Event()
+            current_sim = 'RDHT2'
+            dht.run('RDHT2', threads, settings['RDHT2'], stop_event)
         else:
             print("Invalid option.")
 
