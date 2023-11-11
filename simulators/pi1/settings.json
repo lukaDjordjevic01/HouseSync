@@ -6,5 +6,17 @@
     "RDHT2": {
         "simulated": true,
         "pin": 18
+    },
+    "DPIR1": {
+        "simulated": true,
+        "pin": 18
+    },
+    "RPIR1": {
+        "simulated": true,
+        "pin": 18
+    },
+    "RPIR2": {
+        "simulated": true,
+        "pin": 18
     }
 }
