@@ -43,3 +43,5 @@ def run_dus_loop(dus, device_id, callback, stop_event):
         callback(device_id, distance)
         if stop_event.is_set():
             break
+
+    GPIO.cleanup()

@@ -18,3 +18,5 @@ def run_pir_loop(device_id, callback, stop_event, pin):
 
     while not stop_event.is_set():
         time.sleep(0.1)
+
+    GPIO.cleanup()
