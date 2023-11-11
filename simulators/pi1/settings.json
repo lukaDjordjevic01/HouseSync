@@ -19,6 +19,11 @@
         "simulated": true,
         "pin": 18
     },
+
+    "DB": {
+        "simulated": true,
+        "pin": 25
+    },
     "DUS1": {
         "simulated": true,
         "trig_pin": 18,

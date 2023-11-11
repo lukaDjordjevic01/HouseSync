@@ -41,7 +41,7 @@ def main():
             stop_event = threading.Event()
             dus.run('DUS1', threads, settings['DUS1'], stop_event)
         elif option == '4':
-            db.run('DB')
+            db.run('DB', settings['DB'])
         elif option == '5':
             stop_event = threading.Event()
             pir.run('DPIR1', threads, settings['DPIR1'], stop_event)
