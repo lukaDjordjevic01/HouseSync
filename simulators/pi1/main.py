@@ -40,7 +40,7 @@ def main():
         elif option == '3':
             dus.run('DUS1')
         elif option == '4':
-            db.run('DB')
+            db.run('DB', settings['DB'])
         elif option == '5':
             stop_event = threading.Event()
             pir.run('DPIR1', threads, settings['DPIR1'], stop_event)
