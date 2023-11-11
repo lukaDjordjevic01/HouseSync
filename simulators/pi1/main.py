@@ -1,5 +1,4 @@
 import threading
-
 import keyboard
 
 from db import core as db
@@ -43,13 +42,16 @@ def main():
         elif option == '4':
             db.run('DB')
         elif option == '5':
-            pir.run('DPIR1')
+            stop_event = threading.Event()
+            pir.run('DPIR1', threads, settings['DPIR1'], stop_event)
         elif option == '6':
             dms.run('DMS')
         elif option == '7':
-            pir.run('RPIR1')
+            stop_event = threading.Event()
+            pir.run('RPIR1', threads, settings['DPIR1'], stop_event)
         elif option == '8':
-            pir.run('RPIR2')
+            stop_event = threading.Event()
+            pir.run('RPIR2', threads, settings['DPIR1'], stop_event)
         elif option == '9':
             stop_event = threading.Event()
             current_sim = 'RDHT1'
