@@ -38,7 +38,8 @@ def main():
         elif option == '2':
             dl.run('DL')
         elif option == '3':
-            dus.run('DUS1')
+            stop_event = threading.Event()
+            dus.run('DUS1', threads, settings['DUS1'], stop_event)
         elif option == '4':
             db.run('DB', settings['DB'])
         elif option == '5':
