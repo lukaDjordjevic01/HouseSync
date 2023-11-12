@@ -27,7 +27,6 @@ def menu():
 
 def main():
     threads = {}
-    current_sim = ''
     settings = load_settings()
     while True:
         option = menu()
@@ -44,7 +43,8 @@ def main():
             stop_event = threading.Event()
             pir.run('DPIR1', threads, settings['DPIR1'], stop_event)
         elif option == '6':
-            dms.run('DMS')
+            stop_event = threading.Event()
+            dms.run('DMS', threads, settings['DMS'], stop_event)
         elif option == '7':
             stop_event = threading.Event()
             pir.run('RPIR1', threads, settings['DPIR1'], stop_event)
@@ -53,11 +53,9 @@ def main():
             pir.run('RPIR2', threads, settings['DPIR1'], stop_event)
         elif option == '9':
             stop_event = threading.Event()
-            current_sim = 'RDHT1'
             dht.run('RDHT1', threads, settings['RDHT1'], stop_event)
         elif option == '10':
             stop_event = threading.Event()
-            current_sim = 'RDHT2'
             dht.run('RDHT2', threads, settings['RDHT2'], stop_event)
         else:
             print("Invalid option.")
