@@ -1,5 +1,4 @@
 import threading
-import keyboard
 
 from db import core as db
 from dht import core as dht
@@ -8,7 +7,6 @@ from dms import core as dms
 from ds import core as ds
 from dus import core as dus
 from pir import core as pir
-
 from settings import load_settings
 
 
@@ -36,7 +34,7 @@ def main():
         if option == '1':
             ds.run('DS1')
         elif option == '2':
-            dl.run('DL')
+            dl.run('DL', settings['DL'])
         elif option == '3':
             stop_event = threading.Event()
             dus.run('DUS1', threads, settings['DUS1'], stop_event)

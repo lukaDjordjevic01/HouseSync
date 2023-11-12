@@ -19,7 +19,10 @@
         "simulated": true,
         "pin": 18
     },
-
+    "DL": {
+        "simulated": true,
+        "pin": 18
+    },
     "DB": {
         "simulated": true,
         "pin": 25
