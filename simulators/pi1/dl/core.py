@@ -1,6 +1,6 @@
 import keyboard
 import time
-# import RPi.GPIO
+# import RPi.GPIO as GPIO
 
 
 def run(device_id, settings):

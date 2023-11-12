@@ -42,5 +42,9 @@
         "simulated": true,
         "trig_pin": 18,
         "echo_pin": 19
+    },
+    "DS1": {
+        "simulated": true,
+        "pin": 18
     }
 }
