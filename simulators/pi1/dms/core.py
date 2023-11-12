@@ -18,7 +18,7 @@ def run(device_id, threads, settings, stop_event):
     else:
         from .sensor import run_dms_loop
         print("Starting dms loop")
-        dms_thread = threading.Thread(target=run_dms_loop, args=(dms, 2, callback, stop_event))
+        dms_thread = threading.Thread(target=run_dms_loop, args=(device_id, callback, stop_event, settings))
         threads[device_id] = stop_event
         print(device_id + " sumilator started")
         dms_thread.start()

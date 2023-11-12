@@ -31,7 +31,8 @@ def main():
     while True:
         option = menu()
         if option == '1':
-            ds.run('DS1')
+            stop_event = threading.Event()
+            ds.run('DS1', threads, settings['DS1'], stop_event)
         elif option == '2':
             dl.run('DL', settings['DL'])
         elif option == '3':
