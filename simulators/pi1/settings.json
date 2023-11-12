@@ -19,7 +19,7 @@
         "simulated": true,
         "pin": 18
     },
-     "DMS": {
+    "DMS": {
         "simulated": true,
         "R1": 18,
         "R2": 18,
@@ -29,5 +29,18 @@
         "C2": 18,
         "C3": 18,
         "C4": 18
+    },
+    "DL": {
+        "simulated": true,
+        "pin": 18
+    },
+    "DB": {
+        "simulated": true,
+        "pin": 25
+    },
+    "DUS1": {
+        "simulated": true,
+        "trig_pin": 18,
+        "echo_pin": 19
     }
 }
