@@ -21,6 +21,7 @@ def run(device_id, settings):
         time.sleep(0.1)
 
     keyboard.unhook_all()
+    #GPIO.cleanup()
 
 
 def buzz(device_id, pin, pitch=440, duration=1):
