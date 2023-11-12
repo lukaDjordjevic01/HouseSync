@@ -1,3 +1,5 @@
+import time
+
 import RPi.GPIO as GPIO
 import keyboard
 
@@ -13,3 +15,8 @@ def run_pir_loop(device_id, callback, stop_event, pin):
     keyboard.hook(on_key_event)
 
     GPIO.add_event_detect(pin, GPIO.RISING, callback=lambda cb: callback(device_id))
+
+    while not stop_event.is_set():
+        time.sleep(0.1)
+
+    GPIO.cleanup()
