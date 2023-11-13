@@ -1,0 +1,50 @@
+{
+    "RDHT1": {
+        "simulated": true,
+        "pin": 17
+    },
+    "RDHT2": {
+        "simulated": true,
+        "pin": 18
+    },
+    "DPIR1": {
+        "simulated": true,
+        "pin": 18
+    },
+    "RPIR1": {
+        "simulated": true,
+        "pin": 18
+    },
+    "RPIR2": {
+        "simulated": true,
+        "pin": 18
+    },
+    "DMS": {
+        "simulated": true,
+        "R1": 18,
+        "R2": 18,
+        "R3": 18,
+        "R4": 18,
+        "C1": 18,
+        "C2": 18,
+        "C3": 18,
+        "C4": 18
+    },
+    "DL": {
+        "simulated": true,
+        "pin": 18
+    },
+    "DB": {
+        "simulated": true,
+        "pin": 25
+    },
+    "DUS1": {
+        "simulated": true,
+        "trig_pin": 18,
+        "echo_pin": 19
+    },
+    "DS1": {
+        "simulated": true,
+        "pin": 18
+    }
+}
