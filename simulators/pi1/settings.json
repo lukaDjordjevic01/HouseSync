@@ -49,6 +49,8 @@
     },
     "DS1": {
         "simulated": true,
-        "pin": 18
+        "pin": 18,
+        "runs_on": "PI1",
+        "name": "Door sensor"
     }
 }

@@ -14,7 +14,7 @@ mqtt_client.connect(mqtt_host, mqtt_port, 60)
 mqtt_client.loop_start()
 
 # TODO: Add topics as needed
-topics = ["Temperature", "Humidity"]
+topics = ["Temperature", "Humidity", "Door"]
 
 
 def on_connect(client, userdata, flags, rc):
@@ -27,6 +27,7 @@ mqtt_client.on_message = lambda client, userdata, msg: save_to_db(json.loads(msg
 
 
 def save_to_db(data):
+    print(data)
     write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
     point = (
         Point(data["measurement"])
