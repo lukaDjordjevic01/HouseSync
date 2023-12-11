@@ -1,11 +1,15 @@
 {
     "RDHT1": {
         "simulated": true,
-        "pin": 17
+        "pin": 17,
+        "runs_on": "PI1",
+        "name": "Room DHT"
     },
     "RDHT2": {
         "simulated": true,
-        "pin": 18
+        "pin": 18,
+        "runs_on": "PI1",
+        "name": "Room DHT"
     },
     "DPIR1": {
         "simulated": true,

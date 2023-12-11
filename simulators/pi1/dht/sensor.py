@@ -90,12 +90,12 @@ def parse_check_code(code):
         return "DHTLIB_INVALID_VALUE"
 
 
-def run_dht_loop(dht, delay, callback, stop_event):
+def run_dht_loop(device_id, dht, delay, callback, stop_event, publish_event, settings):
     while True:
         check = dht.read_dht11()
         code = parse_check_code(check)
         humidity, temperature = dht.humidity, dht.temperature
-        callback(humidity, temperature, code)
+        callback(device_id, humidity, temperature, publish_event, settings)
         if stop_event.is_set():
             break
         time.sleep(delay)  # Delay between readings
