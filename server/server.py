@@ -17,13 +17,13 @@ mqtt_client.loop_start()
 topics = ["Temperature", "Humidity"]
 
 
-def on_connect(client):
+def on_connect(client, userdata, flags, rc):
     for topic in topics:
         client.subscribe(topic)
 
 
 mqtt_client.on_connect = on_connect
-mqtt_client.on_message = lambda msg: save_to_db(json.loads(msg.payload.decode('utf-8')))
+mqtt_client.on_message = lambda client, userdata, msg: save_to_db(json.loads(msg.payload.decode('utf-8')))
 
 
 def save_to_db(data):
