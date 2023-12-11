@@ -55,6 +55,7 @@ def main():
         elif option == '9':
             stop_event = threading.Event()
             dht.run('RDHT1', threads, settings['RDHT1'], stop_event)
+            dht.run('RDHT2', threads, settings['RDHT2'], stop_event)
         elif option == '10':
             stop_event = threading.Event()
             dht.run('RDHT2', threads, settings['RDHT2'], stop_event)
