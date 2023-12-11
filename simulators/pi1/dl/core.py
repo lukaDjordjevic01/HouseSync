@@ -1,6 +1,6 @@
 import keyboard
 import time
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 
 
 def run(device_id, settings):
@@ -21,16 +21,16 @@ def run(device_id, settings):
     while not exit_flag[0]:
         time.sleep(0.1)
 
-    GPIO.cleanup()
+    #GPIO.cleanup()
 
 
 def light_switch(switch, device_id, pin):
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(pin, GPIO.OUT)
+    #GPIO.setmode(GPIO.BCM)
+    #GPIO.setup(pin, GPIO.OUT)
 
     if switch:
-        GPIO.output(pin, GPIO.HIGH)
+       # GPIO.output(pin, GPIO.HIGH)
         print(device_id + " is on.")
         return
-    GPIO.output(pin, GPIO.LOW)
+    #GPIO.output(pin, GPIO.LOW)
     print(device_id + " is off.")
