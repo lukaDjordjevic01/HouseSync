@@ -11,7 +11,7 @@ def generate_values():
         yield random.choice(characters)
 
 
-def run_dms_simulator(delay, callback, stop_event):
+def run_dms_simulator(device_id, delay, callback, stop_event, publish_event, settings):
     def on_key_event(e):
         if e.name == 'x' and e.event_type == keyboard.KEY_DOWN:
             stop_event.set()
@@ -20,6 +20,6 @@ def run_dms_simulator(delay, callback, stop_event):
 
     for o in generate_values():
         time.sleep(delay)
-        callback(o)
+        callback(device_id, o, publish_event, settings)
         if stop_event.is_set():
             break

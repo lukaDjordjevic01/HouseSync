@@ -13,7 +13,7 @@ mqtt_client = mqtt.Client()
 
 
 # TODO: Add topics as needed
-topics = ["Distance", "Temperature", "Humidity", "Door"]
+topics = ["Distance", "Temperature", "Humidity", "Door", "Keys_pressed"]
 
 
 def on_connect(client, userdata, flags, rc):
