@@ -10,21 +10,23 @@ app = Flask(__name__)
 influxdb_client = InfluxDBClient(url=influx_url, token=influx_token, org=influx_org)
 
 mqtt_client = mqtt.Client()
-mqtt_client.connect(mqtt_host, mqtt_port, 60)
-mqtt_client.loop_start()
+
 
 # TODO: Add topics as needed
-topics = ["Temperature", "Humidity", "Door"]
+topics = ["Distance", "Temperature", "Humidity", "Door"]
 
 
 def on_connect(client, userdata, flags, rc):
     for topic in topics:
+        print(topic)
         client.subscribe(topic)
 
 
 mqtt_client.on_connect = on_connect
 mqtt_client.on_message = lambda client, userdata, msg: save_to_db(json.loads(msg.payload.decode('utf-8')))
 
+mqtt_client.connect(mqtt_host, mqtt_port, 60)
+mqtt_client.loop_start()
 
 def save_to_db(data):
     print(data)
@@ -41,4 +43,4 @@ def save_to_db(data):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)

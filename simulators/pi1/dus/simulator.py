@@ -13,7 +13,7 @@ def generate_values(initial_distance=9):
         yield distance
 
 
-def run_dus_simulator(device_id, delay, callback, stop_event):
+def run_dus_simulator(device_id, delay, callback, stop_event, publish_event, settings):
     def on_key_event(e):
         if e.name == 'x' and e.event_type == keyboard.KEY_DOWN:
             stop_event.set()
@@ -22,6 +22,6 @@ def run_dus_simulator(device_id, delay, callback, stop_event):
 
     for distance in generate_values():
         time.sleep(delay)
-        callback(device_id, distance)
+        callback(device_id, distance, publish_event, settings)
         if stop_event.is_set():
             break

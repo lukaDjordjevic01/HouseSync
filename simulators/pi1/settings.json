@@ -13,15 +13,21 @@
     },
     "DPIR1": {
         "simulated": true,
-        "pin": 18
+        "pin": 19,
+        "runs_on": "PI1",
+        "name": "Door PIR"
     },
     "RPIR1": {
         "simulated": true,
-        "pin": 18
+        "pin": 19,
+        "runs_on": "PI1",
+        "name": "Room PIR"
     },
     "RPIR2": {
         "simulated": true,
-        "pin": 18
+        "pin": 19,
+        "runs_on": "PI1",
+        "name": "Room PIR"
     },
     "DMS": {
         "simulated": true,
@@ -45,7 +51,9 @@
     "DUS1": {
         "simulated": true,
         "trig_pin": 18,
-        "echo_pin": 19
+        "echo_pin": 19,
+        "runs_on": "PI1",
+        "name": "Door Ultrasonic Sensor"
     },
     "DS1": {
         "simulated": true,
