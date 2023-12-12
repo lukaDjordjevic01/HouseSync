@@ -5,10 +5,15 @@ import keyboard
 
 
 def generate_values():
-    characters = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '#']
+    password = ""
+    characters = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 
     while True:
-        yield random.choice(characters)
+        password += random.choice(characters)
+        if len(password) == 4:
+            password += "#"
+            yield password
+            password = ""
 
 
 def run_dms_simulator(device_id, delay, callback, stop_event, publish_event, settings):

@@ -11,9 +11,9 @@ influxdb_client = InfluxDBClient(url=influx_url, token=influx_token, org=influx_
 
 mqtt_client = mqtt.Client()
 
-
 # TODO: Add topics as needed
-topics = ["Distance", "Temperature", "Humidity", "Door", "Keys_pressed", "Movement"]
+topics = ["Distance", "Temperature", "Humidity", "Door", "Passwords", "Movement"]
+
 
 def on_connect(client, userdata, flags, rc):
     for topic in topics:
@@ -26,6 +26,7 @@ mqtt_client.on_message = lambda client, userdata, msg: save_to_db(json.loads(msg
 
 mqtt_client.connect(mqtt_host, mqtt_port, 1000)
 mqtt_client.loop_start()
+
 
 def save_to_db(data):
     print(data)

@@ -37,7 +37,7 @@ def callback(device_id, key, publish_event, settings):
     global publish_data_counter, publish_data_limit
 
     payload = {
-        "measurement": "Keys pressed",
+        "measurement": "Passwords",
         "id": device_id,
         "simulated": settings['simulated'],
         "runs_on": settings["runs_on"],
@@ -46,7 +46,7 @@ def callback(device_id, key, publish_event, settings):
     }
 
     with counter_lock:
-        dms_batch.append(('Keys_pressed', json.dumps(payload), 0, True))
+        dms_batch.append(('Passwords', json.dumps(payload), 0, True))
         publish_data_counter += 1
 
     if publish_data_counter >= publish_data_limit:
