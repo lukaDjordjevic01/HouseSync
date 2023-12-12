@@ -13,8 +13,7 @@ mqtt_client = mqtt.Client()
 
 
 # TODO: Add topics as needed
-topics = ["Distance", "Temperature", "Humidity", "Door", "Keys_pressed"]
-
+topics = ["Distance", "Temperature", "Humidity", "Door", "Keys_pressed", "Movement"]
 
 def on_connect(client, userdata, flags, rc):
     for topic in topics:
@@ -25,7 +24,7 @@ def on_connect(client, userdata, flags, rc):
 mqtt_client.on_connect = on_connect
 mqtt_client.on_message = lambda client, userdata, msg: save_to_db(json.loads(msg.payload.decode('utf-8')))
 
-mqtt_client.connect(mqtt_host, mqtt_port, 60)
+mqtt_client.connect(mqtt_host, mqtt_port, 1000)
 mqtt_client.loop_start()
 
 def save_to_db(data):
