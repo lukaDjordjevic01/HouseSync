@@ -48,14 +48,13 @@ def main():
             dms.run('DMS', threads, settings['DMS'], stop_event)
         elif option == '7':
             stop_event = threading.Event()
-            pir.run('RPIR1', threads, settings['DPIR1'], stop_event)
+            pir.run('RPIR1', threads, settings['RPIR1'], stop_event)
         elif option == '8':
             stop_event = threading.Event()
-            pir.run('RPIR2', threads, settings['DPIR1'], stop_event)
+            pir.run('RPIR2', threads, settings['RPIR2'], stop_event)
         elif option == '9':
             stop_event = threading.Event()
             dht.run('RDHT1', threads, settings['RDHT1'], stop_event)
-            dht.run('RDHT2', threads, settings['RDHT2'], stop_event)
         elif option == '10':
             stop_event = threading.Event()
             dht.run('RDHT2', threads, settings['RDHT2'], stop_event)
