@@ -52,17 +52,19 @@ def callback(device_id, publish_event, settings):
         publish_event.set()
 
 
-def run(device_id, threads, settings, stop_event):
+def run(device_id, threads, settings, stop_event, all_sensors=False):
     if settings['simulated']:
         print(f"Starting {device_id} simulator")
         pir_thread = threading.Thread(target=run_pir_simulator, args=(device_id, callback, stop_event, publish_event,
                                                                       settings))
         pir_thread.start()
-        #pir_thread.join()
+        if not all_sensors:
+            pir_thread.join()
     else:
         from .sensor import run_pir_loop
         print(f"Starting {device_id} loop")
         pir_thread = threading.Thread(target=run_pir_loop, args=(device_id, callback, stop_event, publish_event,
                                                                  settings))
         pir_thread.start()
-        pir_thread.join()
+        if not all_sensors:
+            pir_thread.join()

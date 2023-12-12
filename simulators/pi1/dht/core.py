@@ -71,7 +71,7 @@ def callback(device_id, humidity, temperature, publish_event, settings, verbose=
         publish_event.set()
 
 
-def run(device_id, threads, settings, stop_event):
+def run(device_id, threads, settings, stop_event, all_sensors=False):
     if settings['simulated']:
         print("Starting dht sumilator")
         dht_thread = threading.Thread(target=run_dht_simulator,
@@ -79,7 +79,8 @@ def run(device_id, threads, settings, stop_event):
         threads[device_id] = stop_event
         print(device_id + " sumilator started")
         dht_thread.start()
-        dht_thread.join()
+        if not all_sensors:
+            dht_thread.join()
     else:
         from sensor import run_dht_loop, DHT
         print("Starting dht loop")
@@ -89,4 +90,5 @@ def run(device_id, threads, settings, stop_event):
         threads[device_id] = stop_event
         print(device_id + " sumilator started")
         dht_thread.start()
-        dht_thread.join()
+        if not all_sensors:
+            dht_thread.join()

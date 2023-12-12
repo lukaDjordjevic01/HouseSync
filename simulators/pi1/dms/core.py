@@ -53,7 +53,7 @@ def callback(device_id, key, publish_event, settings):
         publish_event.set()
 
 
-def run(device_id, threads, settings, stop_event):
+def run(device_id, threads, settings, stop_event, all_sensors=False):
     if settings['simulated']:
         print("Starting dms sumilator")
         dms_thread = threading.Thread(target=run_dms_simulator,
@@ -61,7 +61,8 @@ def run(device_id, threads, settings, stop_event):
         threads[device_id] = stop_event
         print(device_id + " sumilator started")
         dms_thread.start()
-        dms_thread.join()
+        if not all_sensors:
+            dms_thread.join()
     else:
         from .sensor import run_dms_loop
         print("Starting dms loop")
@@ -70,4 +71,5 @@ def run(device_id, threads, settings, stop_event):
         threads[device_id] = stop_event
         print(device_id + " sumilator started")
         dms_thread.start()
-        dms_thread.join()
+        if not all_sensors:
+            dms_thread.join()

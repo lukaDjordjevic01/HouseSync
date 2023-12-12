@@ -21,6 +21,7 @@ def menu():
     print("8: RPIR2")
     print("9: RDHT1")
     print("10: RDHT2")
+    print("11: All sensor simulators")
     option = input("Pick a sumulation: ")
     return option
 
@@ -58,6 +59,16 @@ def main():
         elif option == '10':
             stop_event = threading.Event()
             dht.run('RDHT2', threads, settings['RDHT2'], stop_event)
+        elif option == '11':
+            stop_event = threading.Event()
+            ds.run('DS1', threads, settings['DS1'], stop_event, True)
+            dus.run('DUS1', threads, settings['DUS1'], stop_event, True)
+            dms.run('DMS', threads, settings['DMS'], stop_event, True)
+            pir.run('DPIR1', threads, settings['DPIR1'], stop_event, True)
+            pir.run('RPIR1', threads, settings['RPIR1'], stop_event, True)
+            pir.run('RPIR2', threads, settings['RPIR2'], stop_event, True)
+            dht.run('RDHT1', threads, settings['RDHT1'], stop_event, True)
+            dht.run('RDHT2', threads, settings['RDHT2'], stop_event, True)
         else:
             print("Invalid option.")
 
