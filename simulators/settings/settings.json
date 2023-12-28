@@ -123,5 +123,10 @@
     "BB": {
         "simulated": true,
         "pin": 25
+    },
+    "GSG": {
+        "simulated": true,
+        "runs_on": "PI2",
+        "name": "Gun safe gyro"
     }
 }
