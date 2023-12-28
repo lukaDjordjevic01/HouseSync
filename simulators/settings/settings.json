@@ -128,5 +128,13 @@
         "simulated": true,
         "runs_on": "PI2",
         "name": "Gun safe gyro"
+    },
+    "GLCD": {
+        "simulated": true,
+        "runs_on": "PI2",
+        "name": "Garage LCD",
+        "pin_rs": 25,
+        "pin_e": 24,
+        "pins_db": [23, 17, 21, 22]
     }
 }
