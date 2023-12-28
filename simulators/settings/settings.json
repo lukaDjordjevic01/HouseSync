@@ -62,5 +62,66 @@
         "pin": 18,
         "runs_on": "PI1",
         "name": "Door sensor"
+    },
+
+    "DS2": {
+        "simulated": true,
+        "pin": 18,
+        "runs_on": "PI2",
+        "name": "Door sensor"
+    },
+    "DUS2": {
+        "simulated": true,
+        "trig_pin": 18,
+        "echo_pin": 19,
+        "runs_on": "PI2",
+        "name": "Door Ultrasonic Sensor"
+    },
+    "DPIR2": {
+        "simulated": true,
+        "pin": 19,
+        "runs_on": "PI2",
+        "name": "Door PIR"
+    },
+    "GDHT": {
+        "simulated": true,
+        "pin": 17,
+        "runs_on": "PI2",
+        "name": "Garage DHT"
+    },
+    "RPIR3": {
+        "simulated": true,
+        "pin": 19,
+        "runs_on": "PI2",
+        "name": "Door PIR"
+    },
+    "RDHT3": {
+        "simulated": true,
+        "pin": 17,
+        "runs_on": "PI2",
+        "name": "Room DHT"
+    },
+
+    "RPIR4": {
+        "simulated": true,
+        "pin": 19,
+        "runs_on": "PI3",
+        "name": "Room PIR"
+    },
+    "RDHT4": {
+        "simulated": true,
+        "pin": 17,
+        "runs_on": "PI3",
+        "name": "Room DHT"
+    },
+    "BIR": {
+        "simulated": true,
+        "pin": 19,
+        "runs_on": "PI3",
+        "name": "Bedroom PIR"
+    },
+    "BB": {
+        "simulated": true,
+        "pin": 25
     }
 }
