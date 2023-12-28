@@ -12,7 +12,7 @@ influxdb_client = InfluxDBClient(url=influx_url, token=influx_token, org=influx_
 mqtt_client = mqtt.Client()
 
 # TODO: Add topics as needed
-topics = ["Distance", "Temperature", "Humidity", "Door", "Passwords", "Movement", "Acceleration", "Rotation"]
+topics = ["Distance", "Temperature", "Humidity", "Door", "Passwords", "Movement", "Acceleration", "Rotation", "GLCD"]
 
 
 def on_connect(client, userdata, flags, rc):
