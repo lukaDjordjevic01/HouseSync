@@ -15,15 +15,12 @@ def main():
     threads = {}
     settings = load_settings()
     stop_event = threading.Event()
-    ds.run('DS1', threads, settings['DS1'], stop_event, True)
-    dus.run('DUS1', threads, settings['DUS1'], stop_event, True)
-    dms.run('DMS', threads, settings['DMS'], stop_event, True)
-    pir.run('DPIR1', threads, settings['DPIR1'], stop_event, True)
-    pir.run('RPIR1', threads, settings['RPIR1'], stop_event, True)
-    pir.run('RPIR2', threads, settings['RPIR2'], stop_event, True)
-    dht.run('RDHT1', threads, settings['RDHT1'], stop_event, True)
-    dht.run('RDHT2', threads, settings['RDHT2'], stop_event, True)
-    # Buzzer and Light
+    pir.run('RPIR4', threads, settings['RPIR4'], stop_event, True)
+    dht.run('RDHT4', threads, settings['RDHT4'], stop_event, True)
+    # Buzzer
+    # B4SD
+    pir.run('BIR', threads, settings['BIR'], stop_event, True)
+    # BRGB
 
 
 if __name__ == '__main__':
