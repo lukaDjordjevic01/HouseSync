@@ -44,11 +44,15 @@
     },
     "DL": {
         "simulated": true,
-        "pin": 18
+        "pin": 18,
+        "runs_on": "PI1",
+        "name": "Door light"
     },
     "DB": {
         "simulated": true,
-        "pin": 25
+        "pin": 25,
+        "runs_on": "PI1",
+        "name": "Door buzzer"
     },
     "DUS1": {
         "simulated": true,
@@ -122,7 +126,8 @@
     },
     "BB": {
         "simulated": true,
-        "pin": 25
+        "pin": 25,
+        "runs_on": "PI3"
     },
     "GSG": {
         "simulated": true,
@@ -141,6 +146,7 @@
         "simulated": true,
         "red_pin": 12,
         "green_pin": 13,
-        "blue_pin": 15
+        "blue_pin": 15,
+        "runs_on": "PI3"
     }
 }

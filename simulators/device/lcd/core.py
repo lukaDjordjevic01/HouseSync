@@ -91,7 +91,7 @@ def run_lcd_thread(device_id, delay, settings, stop_event):
             lcd = Adafruit_CharLCD(settings['pin_rs'], settings['pin_e'], settings['pins_db'])
             lcd.clear()
             lcd.message(message)
-        callback(device_id, message, publish_event, settings)
+        # callback(device_id, message, publish_event, settings)
         time.sleep(delay)
 
 
