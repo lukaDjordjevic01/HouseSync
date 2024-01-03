@@ -45,12 +45,14 @@
     "DL": {
         "simulated": true,
         "pin": 18,
-        "runs_on": "PI1"
+        "runs_on": "PI1",
+        "name": "Door light"
     },
     "DB": {
         "simulated": true,
         "pin": 25,
-        "runs_on": "PI1"
+        "runs_on": "PI1",
+        "name": "Door buzzer"
     },
     "DUS1": {
         "simulated": true,
