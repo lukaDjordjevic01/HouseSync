@@ -43,7 +43,8 @@ export default function Devices () {
             display: "flex",
             flexDirection: "column",
             padding: "20px",
-            gap: "10px"
+            gap: "10px",
+            width: "100%"
         }}>
             <Accordion
                 sx={{
@@ -100,8 +101,14 @@ export default function Devices () {
                 </AccordionDetails>
             </Accordion>
 
-            <Dialog open={selectedDevice !== null} onClose={() => setSelectedDevice(null)} fullWidth>
-                <DialogContent>
+            <Dialog open={selectedDevice !== null} onClose={() => setSelectedDevice(null)} fullWidth
+                maxWidth={"md"}>
+                <DialogContent
+                    sx={{
+                        padding: "0",
+                        width: "100%",
+
+                    }}>
                     {selectedDevice && <DevicePopup device={selectedDevice}/>}
                 </DialogContent>
             </Dialog>

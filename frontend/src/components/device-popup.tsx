@@ -1,17 +1,36 @@
-import {Device} from "../model.ts";
-import {useEffect} from "react";
+import {Device, Measurement} from "../model.ts";
+import {useEffect, useState} from "react";
 import {io} from "socket.io-client";
+import {getGrafanaURL} from "../util/util.ts";
+import {Box, useTheme} from "@mui/material";
+import "./device-popup.css";
 
 export default function DevicePopup({device}: {device: Device}) {
+
+    const [measurements, setMeasurements] = useState<Measurement[]>([]);
+    const theme = useTheme();
 
     useEffect(() => {
         const socket = io('http://localhost:5000');
         const topic = device.id
 
+        if (device.id.includes("DHT")) setMeasurements(
+            [{
+                name: "Temperature", unit: "°C"
+            }, {
+                name: "Humidity", unit: "%"
+            }])
+        else if (device.id.includes("GSG")) setMeasurements(
+            [{
+                name: "Acceleration", unit: "x y z"
+            }, {
+                name: "Rotation", unit: "x y z"
+            }])
+
         socket.emit('subscribe', { topic });
 
         const handler = (data: any) => {
-            // console.log(data);
+            console.log(data);
         }
 
         // Listen for messages on the subscribed topic
@@ -25,8 +44,29 @@ export default function DevicePopup({device}: {device: Device}) {
     }, [device]);
 
     return (
-        <>
-            <p>{device.name}</p>
-        </>
+        <Box id="device-popup-box"
+            sx={{
+                backgroundColor: theme.palette.background.default,
+                color: theme.palette.primary.contrastText,
+            }}
+        >
+            <h2>{device.name}</h2>
+
+            {device && !device.id.includes("DHT") && !device.id.includes("GSG") &&
+                <Box className="grafana-box">
+                    <iframe src={getGrafanaURL(device.id, "")}/>
+                </Box>
+            }
+
+            {device && measurements[0] && measurements[1] && (device.id.includes("DHT") || device.id.includes("GSG")) &&
+                <Box className="grafana-box">
+                    <h3>{measurements[0].name} {measurements[0].unit}</h3>
+                    <iframe src={getGrafanaURL(device.id, measurements[0].name)}/>
+
+                    <h3>{measurements[1].name} {measurements[1].unit}</h3>
+                    <iframe src={getGrafanaURL(device.id, measurements[1].name)}/>
+                </Box>
+            }
+        </Box>
     )
 }
