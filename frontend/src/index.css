@@ -30,3 +30,17 @@ h4 {
 #logo:hover {
   cursor: pointer;
 }
+
+*::-webkit-scrollbar {
+  width: 15px; /* For Webkit browsers like Chrome and Safari - Adjust width as needed */
+
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #4D4D4D; /* For Webkit browsers - Replace with your thumb color */
+  border-radius: 5px;
+}
+
+*::-webkit-scrollbar-track {
+  background-color: #1E1E1E; /* For Webkit browsers - Replace with your track color */
+}

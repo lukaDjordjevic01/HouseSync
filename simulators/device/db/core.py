@@ -9,6 +9,8 @@ def run(device_id, settings):
     print("Buzz the buzzer with 'b' and exit this simulation with 'x'")
     exit_flag = [False]
 
+
+    # umesto ovoga subscribe na topic i staviti da se okine na alarm ili neki drugi event
     def on_key_event(e):
         if e.name == 'x' and e.event_type == keyboard.KEY_DOWN:
             exit_flag[0] = True
@@ -27,6 +29,7 @@ def buzz(device_id, pin, pitch=440, duration=1):
     period = 1.0 / pitch
     delay = period / 2
     cycles = int(duration * pitch)
+    #while dok se ne prekine alarm
     for i in range(cycles):
         #GPIO.output(pin, True)
         time.sleep(delay)

@@ -1,0 +1,23 @@
+#device-popup-box{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+}
+
+.grafana-box{
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+}
+
+.grafana-box iframe{
+    width: 100%;
+    margin-bottom: 15px;
+    height: 300px;
+}
+
+h3{
+    margin: 0;
+}

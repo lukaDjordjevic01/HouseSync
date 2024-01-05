@@ -44,6 +44,12 @@ def callback(device_id, publish_event, settings):
         "value": "Person passed"
     }
 
+    #kada detektuje pokret salje svom dus-u signal on zabelezi udaljenost
+    #ako je dpir1 onda ukljuci i DL1
+    #videti dal neko ulazi il izlazi
+    #brojno stanje osoba u objektu -> globalna promenljiva
+    # ako je neki od RPIR-ova a nema osoba u objektu, ukljucuhe se alarm
+
     with counter_lock:
         pir_batch.append(('Movement', json.dumps(movement_payload), 0, True))
         publish_data_counter += 1

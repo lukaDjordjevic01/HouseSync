@@ -3,3 +3,8 @@ export interface Device {
     name: string,
     runs_on: string,
 }
+
+export interface Measurement{
+    name: string,
+    unit: string
+}

@@ -42,6 +42,9 @@ def callback(device_id, locked, publish_event, settings):
         "value": locked
     }
 
+    #meriti vreme od prethodnog callbacka i onda ukljuciti alarm ako treba
+    # ako se ukljucio alarm, kad stigner signal za zakljucavanje iskljuciti alarm
+
     with ds_counter_lock:
         ds_batch.append(('Door', json.dumps(payload), 0, True))
         publish_ds_data_counter += 1
