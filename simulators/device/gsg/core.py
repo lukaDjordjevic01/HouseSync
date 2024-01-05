@@ -57,6 +57,8 @@ def callback(device_id, acceleration, rotation, publish_event, settings):
         "value": ' '.join(map(str, rotation))
     }
 
+    #ako se detektuje znacajan pomeraj onda aktivirati alarm
+
     with counter_lock:
         gsg_batch.append(('Acceleration', json.dumps(acceleration_payload), 0, True))
         gsg_batch.append(('Rotation', json.dumps(rotation_payload), 0, True))

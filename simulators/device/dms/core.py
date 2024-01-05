@@ -45,6 +45,8 @@ def callback(device_id, key, publish_event, settings):
         "value": key
     }
 
+    #vrednost payloada ce se slati za gasenje alarma
+
     with counter_lock:
         dms_batch.append(('Passwords', json.dumps(payload), 0, True))
         publish_data_counter += 1
