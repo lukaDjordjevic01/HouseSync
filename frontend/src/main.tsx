@@ -5,6 +5,7 @@ import {RouterProvider, createBrowserRouter} from "react-router-dom";
 import Navbar from "./components/navbar.tsx";
 import Alarms from "./pages/alarms.tsx";
 import Devices from "./pages/devices.tsx";
+import Scenarios from "./pages/scenarios.tsx";
 
 const theme = createTheme({
     palette: {
@@ -42,7 +43,8 @@ const router = createBrowserRouter([
         element: <Navbar/>,
         children:[
             {path: "/alarms", element: <Alarms/>},
-            {path: "/devices", element: <Devices/>}
+            {path: "/devices", element: <Devices/>},
+            {path: "/scenarios", element: <Scenarios/>},
         ]
     }
 ])

@@ -27,6 +27,12 @@ export default function Navbar () {
                                 color: "#F5F5F5"
                             }}>Devices</Button>
 
+                    <Button onClick={() => navigate('/scenarios')}
+                            sx={{
+                              textTransform: "capitalize",
+                              color: "#F5F5F5"
+                            }}>Scenarios</Button>
+
                 </Toolbar>
             </AppBar>
             <div id="detail" style={{flex: '1 1 auto', width: "100%"}}>
