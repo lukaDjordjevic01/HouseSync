@@ -18,7 +18,7 @@ def main():
     stop_event = threading.Event()
     # pir.run('RPIR4', threads, settings['RPIR4'], stop_event, True)
     # dht.run('RDHT4', threads, settings['RDHT4'], stop_event, True)
-    # Buzzer
+    db.run('BB', threads, settings['BB'], stop_event, True)
     # B4SD
     # pir.run('BIR', threads, settings['BIR'], stop_event, True)
     rgb.run('BRGB', settings['BRGB'])

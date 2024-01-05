@@ -1,39 +1,71 @@
-#import RPi.GPIO as GPIO
+# import RPi.GPIO as GPIO
+import json
+import threading
 import time
-import keyboard
+
+import paho.mqtt.client as mqtt
+from paho.mqtt import publish
+
+from ...communication_credentials import *
+
+alarm_is_on = False
 
 
-def run(device_id, settings):
-   # GPIO.setmode(GPIO.BCM)
-   # GPIO.setup(settings['pin'], GPIO.OUT)
-    print("Buzz the buzzer with 'b' and exit this simulation with 'x'")
-    exit_flag = [False]
+def on_connect(client, userdata, flags, rc):
+    client.subscribe("Alarm")
 
 
-    # umesto ovoga subscribe na topic i staviti da se okine na alarm ili neki drugi event
-    def on_key_event(e):
-        if e.name == 'x' and e.event_type == keyboard.KEY_DOWN:
-            exit_flag[0] = True
-        elif e.name == 'b' and e.event_type == keyboard.KEY_DOWN:
-            buzz(device_id, settings['pin'])
+def set_up_mqtt():
+    mqtt_client = mqtt.Client()
+    mqtt_client.on_connect = on_connect
+    mqtt_client.on_message = lambda client, userdata, msg: process_message(msg)
 
-    keyboard.hook(on_key_event)
+    mqtt_client.connect(host=mqtt_host, port=mqtt_port, keepalive=1000)
+    mqtt_client.loop_start()
 
-    while not exit_flag[0]:
+
+def process_message(msg):
+    payload = json.loads(msg.payload.decode('utf-8'))
+    if msg.topic == "Alarm":
+        global alarm_is_on
+        if payload['command'] == 'on':
+            alarm_is_on = True
+        elif payload['command'] == 'off':
+            alarm_is_on = False
+
+
+def run_db_thread(device_id, settings, stop_event):
+    set_up_mqtt()
+    # GPIO.setmode(GPIO.BCM)
+    # GPIO.setup(settings['pin'], GPIO.OUT)
+
+    while not stop_event.is_set():
+        buzz(device_id, settings['pin'])
         time.sleep(0.1)
 
-    keyboard.unhook_all()
+
+def run(device_id, threads, settings, stop_event, all_sensors=False):
+    print("Starting db sumilator")
+    db_thread = threading.Thread(target=run_db_thread,
+                                 args=(device_id, settings, stop_event))
+    threads[device_id] = stop_event
+    db_thread.start()
+    if not all_sensors:
+        db_thread.join()
 
 
-def buzz(device_id, pin, pitch=440, duration=1):
+def buzz(device_id, pin, pitch=440):
     period = 1.0 / pitch
     delay = period / 2
-    cycles = int(duration * pitch)
-    #while dok se ne prekine alarm
-    for i in range(cycles):
-        #GPIO.output(pin, True)
+    while alarm_is_on:
+        # GPIO.output(pin, True)
         time.sleep(delay)
-        #GPIO.output(pin, False)
+        # GPIO.output(pin, False)
         time.sleep(delay)
-    print(f"{device_id} buzzed")
-    time.sleep(1)
+        publish.single("Alarm", json.dumps({
+            'command': 'notify',
+            "message": f"{device_id} buzzed",
+            "device_id": device_id
+        }))
+        print(f"{device_id} buzzed")
+        time.sleep(2)

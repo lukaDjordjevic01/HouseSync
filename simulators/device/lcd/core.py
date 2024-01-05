@@ -5,6 +5,8 @@ import time
 import paho.mqtt.client as mqtt
 from paho.mqtt import publish
 from .Adafruit_LCD1602 import Adafruit_CharLCD
+from ...communication_credentials import *
+
 
 gdht_temp = 0
 gdht_humidity = 0
@@ -25,7 +27,7 @@ def set_up_mqtt():
     mqtt_client.on_connect = on_connect
     mqtt_client.on_message = lambda client, userdata, msg: process_message(json.loads(msg.payload.decode('utf-8')))
 
-    mqtt_client.connect("localhost", 1883, 1000)
+    mqtt_client.connect(host=mqtt_host, port=mqtt_port, keepalive=1000)
     mqtt_client.loop_start()
 
 
@@ -51,8 +53,6 @@ def publisher_task(event, lcd_batch):
             lcd_batch.clear()
         publish.multiple(local_lcd_batch, hostname="localhost", port=1883)
         print(f'published {publish_data_limit} dht values')
-        for item in local_lcd_batch:
-            print(item)
         event.clear()
 
 

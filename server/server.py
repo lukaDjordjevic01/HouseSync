@@ -4,6 +4,9 @@ from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 import paho.mqtt.client as mqtt
 import json
+
+from paho.mqtt import publish
+
 from communication_credentials import *
 from simulators.settings.settings import load_settings
 from flask_socketio import SocketIO, join_room, leave_room, send
@@ -35,10 +38,29 @@ def on_connect(client, userdata, flags, rc):
 
 
 mqtt_client.on_connect = on_connect
-mqtt_client.on_message = lambda client, userdata, msg: save_to_db(json.loads(msg.payload.decode('utf-8')))
+mqtt_client.on_message = lambda client, userdata, msg: process_message(msg)
 
 mqtt_client.connect(mqtt_host, mqtt_port, 1000)
 mqtt_client.loop_start()
+
+
+def process_message(msg):
+    payload = json.loads(msg.payload.decode('utf-8'))
+    topic = msg.topic
+    if topic == "Alarm":
+        command = payload['command']
+        if command == 'notify':
+            socketio.emit('message', {'topic': "Alarm", 'message': payload['message']}, room="Alarm")
+        elif command == 'on' or command == 'off':
+            write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
+            point = (
+                Point("Alarm")
+                .tag("device_id", payload['device_id'])
+                .field("command", payload['command'])
+            )
+            write_api.write(bucket=influx_bucket, org=influx_org, record=point)
+    else:
+        save_to_db(payload)
 
 
 def save_to_db(data):

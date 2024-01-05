@@ -22,8 +22,6 @@ def publisher_task(event, gsg_batch):
             gsg_batch.clear()
         publish.multiple(local_gsg_batch, hostname="localhost", port=1883)
         print(f'published {publish_data_limit} dht values')
-        for item in local_gsg_batch:
-            print(item)
         event.clear()
 
 
@@ -74,7 +72,6 @@ def run(device_id, threads, settings, stop_event, all_sensors=False):
         gsg_thread = threading.Thread(target=run_gsg_simulator,
                                       args=(device_id, 2, callback, stop_event, publish_event, settings))
         threads[device_id] = stop_event
-        print(device_id + " sumilator started")
         gsg_thread.start()
         if not all_sensors:
             gsg_thread.join()

@@ -59,7 +59,6 @@ def run(device_id, threads, settings, stop_event, all_sensors=False):
         ds_thread = threading.Thread(target=run_ds_simulator,
                                      args=(device_id, callback, stop_event, publish_event, settings))
         threads[device_id] = stop_event
-        print(device_id + " sumilator started")
         ds_thread.start()
         if not all_sensors:
             ds_thread.join()

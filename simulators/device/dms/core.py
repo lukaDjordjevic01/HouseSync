@@ -22,8 +22,6 @@ def publisher_task(event, dms_batch):
             dms_batch.clear()
         publish.multiple(local_dht_batch, hostname="localhost", port=1883)
         print(f'published {publish_data_limit} dms values')
-        for item in local_dht_batch:
-            print(item)
         event.clear()
 
 
@@ -61,7 +59,6 @@ def run(device_id, threads, settings, stop_event, all_sensors=False):
         dms_thread = threading.Thread(target=run_dms_simulator,
                                       args=(device_id, 2, callback, stop_event, publish_event, settings))
         threads[device_id] = stop_event
-        print(device_id + " sumilator started")
         dms_thread.start()
         if not all_sensors:
             dms_thread.join()
