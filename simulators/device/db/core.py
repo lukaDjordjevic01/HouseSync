@@ -45,7 +45,7 @@ def run_db_thread(device_id, settings, stop_event):
 
 
 def run(device_id, threads, settings, stop_event, all_sensors=False):
-    print("Starting db sumilator")
+    print("Starting db simulator")
     db_thread = threading.Thread(target=run_db_thread,
                                  args=(device_id, settings, stop_event))
     threads[device_id] = stop_event
