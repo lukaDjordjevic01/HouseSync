@@ -31,11 +31,14 @@ topics = ["Distance",
           "Movement",
           "Acceleration",
           "Rotation",
-          "GLCD"]
+          "GLCD",
+          "DPIR",
+          "RPIR"]
 
 ALARM_SYSTEM_IS_ACTIVE = False
 ALARM_IS_ON = False
 VALID_PIN = "1234#"
+PEOPLE_INSIDE = 0
 
 
 def on_connect(client, userdata, flags, rc):
@@ -62,6 +65,10 @@ def process_message(msg):
     elif topic == "Door":
         process_door(payload)
         save_to_db(payload)
+    elif topic == "DPIR":
+        process_dpir(payload)
+    elif topic == "RPIR":
+        process_rpir(payload)
     else:
         save_to_db(payload)
 
@@ -76,7 +83,7 @@ def save_to_db(data):
         .tag("id", data["id"])
         .field("measurement", data["value"])
     )
-    print(data)
+    # print(data)
     write_api.write(bucket=influx_bucket, org=influx_org, record=point)
     socketio.emit('message', {'topic': data["id"], 'message': data}, room=data["id"])
 
@@ -124,6 +131,23 @@ def process_door(payload):
             turn_on_alarm(payload["id"])
 
 
+def process_dpir(payload):
+    global PEOPLE_INSIDE
+    if payload['distance_diff'] >= 0:
+        if PEOPLE_INSIDE > 0:
+            PEOPLE_INSIDE -= 1
+    else:
+        PEOPLE_INSIDE += 1
+    print(PEOPLE_INSIDE)
+
+
+def process_rpir(payload):
+    global PEOPLE_INSIDE, ALARM_SYSTEM_IS_ACTIVE, ALARM_IS_ON
+    if PEOPLE_INSIDE == 0:
+        if ALARM_SYSTEM_IS_ACTIVE and not ALARM_IS_ON:
+            turn_on_alarm(payload["device_id"])
+
+
 @socketio.on('subscribe')
 def handle_subscribe(data):
     topic = data['topic']
@@ -168,6 +192,26 @@ def dms_pin():
 def ds():
     payload = request.get_json()
     publish.single("DS", json.dumps({"device_id": payload["device_id"]}), hostname=mqtt_host, port=mqtt_port)
+    return json.dumps("")
+
+
+@app.route('/dus', methods=['post'])
+def dus():
+    payload = request.get_json()
+    publish.single("DUS-scenario",
+                   json.dumps({"device_id": payload["device_id"], "scenario": payload["scenario"]}),
+                   hostname=mqtt_host,
+                   port=mqtt_port)
+    return json.dumps("")
+
+
+@app.route('/rpir', methods=['post'])
+def rpir():
+    payload = request.get_json()
+    publish.single("RPIR-scenario",
+                   json.dumps({"device_id": payload["device_id"]}),
+                   hostname=mqtt_host,
+                   port=mqtt_port)
     return json.dumps("")
 
 

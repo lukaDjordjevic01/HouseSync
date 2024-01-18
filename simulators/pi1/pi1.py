@@ -16,6 +16,7 @@ def main():
     settings = load_settings()
     stop_event = threading.Event()
     ds.run('DS1', threads, settings['DS1'], stop_event, True)
+    dl.run('DL', threads, settings['DL'], stop_event, True)
     dus.run('DUS1', threads, settings['DUS1'], stop_event, True)
     dms.run('DMS', threads, settings['DMS'], stop_event, True)
     pir.run('DPIR1', threads, settings['DPIR1'], stop_event, True)

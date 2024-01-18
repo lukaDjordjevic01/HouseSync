@@ -1,36 +1,56 @@
-import keyboard
+import json
+import threading
+
 import time
-#import RPi.GPIO as GPIO
+import paho.mqtt.client as mqtt
+from ...communication_credentials import *
 
 
-def run(device_id, settings):
-    print("Turn the light on with 'a', turn it of with 'd', exit with x: ")
+# import RPi.GPIO as GPIO
 
-    exit_flag = [False]
 
-    def on_key_event(e):
-        if e.name == 'x' and e.event_type == keyboard.KEY_DOWN:
-            exit_flag[0] = True
-        elif e.name == 'a' and e.event_type == keyboard.KEY_DOWN:
-            light_switch(True, device_id, settings['pin'])
-        elif e.name == 'd' and e.event_type == keyboard.KEY_DOWN:
-            light_switch(False, device_id, settings['pin'])
+def on_connect(client, userdata, flags, rc):
+    client.subscribe("DL")
 
-    keyboard.hook(on_key_event)
 
-    while not exit_flag[0]:
+def set_up_mqtt(device_id, settings):
+    mqtt_client = mqtt.Client()
+    mqtt_client.on_connect = on_connect
+    mqtt_client.on_message = lambda client, userdata, msg: process_message(device_id, settings)
+
+    mqtt_client.connect(host=mqtt_host, port=mqtt_port, keepalive=1000)
+    mqtt_client.loop_start()
+
+
+def process_message(device_id, settings):
+    light_switch(True, device_id, settings['pin'])
+    time.sleep(10)
+    light_switch(False, device_id, settings['pin'])
+
+
+def run_dl_thread(device_id, settings, stop_event):
+    set_up_mqtt(device_id, settings)
+    # GPIO.setmode(GPIO.BCM)
+    # GPIO.setup(pin, GPIO.OUT)
+    while not stop_event.is_set():
         time.sleep(0.1)
+    # GPIO.cleanup()
 
-    #GPIO.cleanup()
+
+def run(device_id, threads, settings, stop_event, all_sensors=False):
+    print("Starting dl simulator")
+    dl_thread = threading.Thread(target=run_dl_thread,
+                                 args=(device_id, settings, stop_event))
+    threads[device_id] = stop_event
+    dl_thread.start()
+    if not all_sensors:
+        dl_thread.join()
 
 
 def light_switch(switch, device_id, pin):
-    #GPIO.setmode(GPIO.BCM)
-    #GPIO.setup(pin, GPIO.OUT)
-
     if switch:
-       # GPIO.output(pin, GPIO.HIGH)
+        # GPIO.output(pin, GPIO.HIGH)
         print(device_id + " is on.")
         return
-    #GPIO.output(pin, GPIO.LOW)
+    # GPIO.output(pin, GPIO.LOW)
     print(device_id + " is off.")
