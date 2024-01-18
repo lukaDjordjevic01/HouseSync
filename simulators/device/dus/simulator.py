@@ -1,8 +1,6 @@
 import time
 import random
 
-import keyboard
-
 
 def generate_values(initial_distance=9):
     distance = initial_distance
@@ -14,11 +12,6 @@ def generate_values(initial_distance=9):
 
 
 def run_dus_simulator(device_id, delay, callback, stop_event, publish_event, settings):
-    def on_key_event(e):
-        if e.name == 'x' and e.event_type == keyboard.KEY_DOWN:
-            stop_event.set()
-
-    keyboard.hook(on_key_event)
 
     for distance in generate_values():
         time.sleep(delay)

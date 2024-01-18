@@ -76,6 +76,7 @@ def save_to_db(data):
         .tag("id", data["id"])
         .field("measurement", data["value"])
     )
+    print(data)
     write_api.write(bucket=influx_bucket, org=influx_org, record=point)
     socketio.emit('message', {'topic': data["id"], 'message': data}, room=data["id"])
 
@@ -84,13 +85,15 @@ def process_pin(payload):
     global ALARM_SYSTEM_IS_ACTIVE
     if ALARM_SYSTEM_IS_ACTIVE and VALID_PIN == payload['value']:
         turn_off_alarm(payload["id"])
-        publish.single("Alarm", json.dumps({"command": "deactivate"}))
+        publish.single("Alarm", json.dumps({"command": "deactivate"}), hostname=mqtt_host, port=mqtt_port)
+        publish.single("Alarm", json.dumps({"command": "deactivate"}), hostname=mqtt_host_pi, port=mqtt_port_pi)
         ALARM_SYSTEM_IS_ACTIVE = False
     elif ALARM_SYSTEM_IS_ACTIVE and VALID_PIN != payload['value']:
         turn_on_alarm(payload["id"])
     elif not ALARM_SYSTEM_IS_ACTIVE and VALID_PIN == payload['value']:
         time.sleep(10)
-        publish.single("Alarm", json.dumps({"command": "activate"}))
+        publish.single("Alarm", json.dumps({"command": "activate"}), hostname=mqtt_host, port=mqtt_port)
+        publish.single("Alarm", json.dumps({"command": "activate"}), hostname=mqtt_host_pi, port=mqtt_port_pi)
         ALARM_SYSTEM_IS_ACTIVE = True
         print("Aktiviran alarm")
     elif not ALARM_SYSTEM_IS_ACTIVE and VALID_PIN != payload['value']:
@@ -160,6 +163,7 @@ def get_devices():
 def dms_pin():
     payload = request.get_json()
     publish.single("DMS", json.dumps({"scenario": payload["scenario"]}), hostname=mqtt_host, port=mqtt_port)
+    publish.single("DMS", json.dumps({"scenario": payload["scenario"]}), hostname=mqtt_host_pi, port=mqtt_port_pi)
     return json.dumps("")
 
 
@@ -167,6 +171,7 @@ def dms_pin():
 def ds():
     payload = request.get_json()
     publish.single("DS", json.dumps({"device_id": payload["device_id"]}), hostname=mqtt_host, port=mqtt_port)
+    publish.single("DS", json.dumps({"device_id": payload["device_id"]}), hostname=mqtt_host_pi, port=mqtt_port_pi)
     return json.dumps("")
 
 

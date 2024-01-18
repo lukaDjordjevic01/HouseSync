@@ -24,10 +24,7 @@ def set_up_mqtt(device_id, settings):
 def process_message(msg, device_id, settings):
     payload = json.loads(msg.payload.decode('utf-8'))
     if msg.topic == device_id:
-        if payload['command'] == 'on':
-            alarm_is_on = True
-        elif payload['command'] == 'off':
-            alarm_is_on = False
+        process_command(settings, payload['command'])
 
 
 def run_rgb_thread(device_id, settings, stop_event):
@@ -40,8 +37,6 @@ def run_rgb_thread(device_id, settings, stop_event):
         GPIO.setup(settings["blues_pin"], GPIO.OUT)
 
     while not stop_event.is_set():
-        # slusaj neki dogadjaj
-        command = 'off'
 
         time.sleep(2)
 
