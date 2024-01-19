@@ -138,6 +138,8 @@ def process_dpir(payload):
             PEOPLE_INSIDE -= 1
     else:
         PEOPLE_INSIDE += 1
+    socketio.emit('message', {'topic': 'people-inside', 'message': {'people_inside': PEOPLE_INSIDE}},
+                  room='people-inside')
     print(PEOPLE_INSIDE)
 
 
