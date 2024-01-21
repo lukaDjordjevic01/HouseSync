@@ -10,9 +10,12 @@ from ...communication_credentials import *
 
 alarm_is_on = False
 
+alarm_clock_is_on = False
+
 
 def on_connect(client, userdata, flags, rc):
     client.subscribe("Alarm")
+    client.subscribe("alarm-clock")
 
 
 def set_up_mqtt():
@@ -32,6 +35,9 @@ def process_message(msg):
             alarm_is_on = True
         elif payload['command'] == 'off':
             alarm_is_on = False
+    elif msg.topic == "alarm-clock":
+        global alarm_clock_is_on
+        alarm_clock_is_on = payload['is_on']
 
 
 def run_db_thread(device_id, settings, stop_event):
@@ -40,7 +46,7 @@ def run_db_thread(device_id, settings, stop_event):
     # GPIO.setup(settings['pin'], GPIO.OUT)
 
     while not stop_event.is_set():
-        buzz(device_id, settings['pin'])
+        buzz_loop(device_id, settings['pin'])
         time.sleep(0.1)
 
 
@@ -54,18 +60,26 @@ def run(device_id, threads, settings, stop_event, all_sensors=False):
         db_thread.join()
 
 
-def buzz(device_id, pin, pitch=440):
+def buzz_loop(device_id, pin, pitch=440):
     period = 1.0 / pitch
     delay = period / 2
-    while alarm_is_on:
-        # GPIO.output(pin, True)
-        time.sleep(delay)
-        # GPIO.output(pin, False)
-        time.sleep(delay)
-        publish.single("Alarm", json.dumps({
-            'command': 'notify',
-            "message": f"{device_id} buzzed",
-            "device_id": device_id
-        }))
-        print(f"{device_id} buzzed")
-        time.sleep(2)
+    if device_id == "BB":
+        while alarm_is_on or alarm_clock_is_on:
+            buzz(device_id, pin, delay)
+    else:
+        while alarm_is_on:
+            buzz(device_id, pin, delay)
+
+
+def buzz(device_id, pin, delay):
+    # GPIO.output(pin, True)
+    time.sleep(delay)
+    # GPIO.output(pin, False)
+    time.sleep(delay)
+    publish.single("Alarm", json.dumps({
+        'command': 'notify',
+        "message": f"{device_id} buzzed",
+        "device_id": device_id
+    }))
+    print(f"{device_id} buzzed")
+    time.sleep(2)
