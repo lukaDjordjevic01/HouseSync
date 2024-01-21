@@ -1,10 +1,8 @@
 import time
 import random
 
-import keyboard
 
-
-def generate_values(initial_temp=25, initial_humidity=20):
+def generate_values(initial_temp=25.0, initial_humidity=20.0):
     temperature = initial_temp
     humidity = initial_humidity
     while True:
@@ -14,15 +12,10 @@ def generate_values(initial_temp=25, initial_humidity=20):
             humidity = 0
         if humidity > 100:
             humidity = 100
-        yield humidity, temperature
+        yield float(humidity), float(temperature)
 
 
 def run_dht_simulator(device_id, delay, callback, stop_event, publish_event, settings):
-    def on_key_event(e):
-        if e.name == 'x' and e.event_type == keyboard.KEY_DOWN:
-            stop_event.set()
-
-    keyboard.hook(on_key_event)
 
     for h, t in generate_values():
         time.sleep(delay)  # Delay between readings (adjust as needed)

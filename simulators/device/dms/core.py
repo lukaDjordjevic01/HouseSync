@@ -4,36 +4,10 @@ import threading
 from paho.mqtt import publish
 
 from .simulator import run_dms_simulator
+from ...communication_credentials import *
 
 
-dms_batch = []
-publish_data_counter = 0
-publish_data_limit = 5
-counter_lock = threading.Lock()
-
-
-def publisher_task(event, dms_batch):
-    global publish_data_counter, publish_data_limit
-    while True:
-        event.wait()
-        with counter_lock:
-            local_dht_batch = dms_batch.copy()
-            publish_data_counter = 0
-            dms_batch.clear()
-        publish.multiple(local_dht_batch, hostname="localhost", port=1883)
-        print(f'published {publish_data_limit} dms values')
-        for item in local_dht_batch:
-            print(item)
-        event.clear()
-
-
-publish_event = threading.Event()
-publisher_thread = threading.Thread(target=publisher_task, args=(publish_event, dms_batch,))
-publisher_thread.daemon = True
-publisher_thread.start()
-
-
-def callback(device_id, key, publish_event, settings):
+def callback(device_id, pin, settings):
     global publish_data_counter, publish_data_limit
 
     payload = {
@@ -42,26 +16,18 @@ def callback(device_id, key, publish_event, settings):
         "simulated": settings['simulated'],
         "runs_on": settings["runs_on"],
         "name": settings["name"],
-        "value": key
+        "value": pin
     }
 
-    #vrednost payloada ce se slati za gasenje alarma
-
-    with counter_lock:
-        dms_batch.append(('Passwords', json.dumps(payload), 0, True))
-        publish_data_counter += 1
-
-    if publish_data_counter >= publish_data_limit:
-        publish_event.set()
+    publish.single("Passwords", json.dumps(payload), hostname=mqtt_host, port=mqtt_port)
 
 
 def run(device_id, threads, settings, stop_event, all_sensors=False):
     if settings['simulated']:
         print("Starting dms sumilator")
         dms_thread = threading.Thread(target=run_dms_simulator,
-                                      args=(device_id, 2, callback, stop_event, publish_event, settings))
+                                      args=(device_id, 2, callback, stop_event, settings))
         threads[device_id] = stop_event
-        print(device_id + " sumilator started")
         dms_thread.start()
         if not all_sensors:
             dms_thread.join()
@@ -69,7 +35,7 @@ def run(device_id, threads, settings, stop_event, all_sensors=False):
         from .sensor import run_dms_loop
         print("Starting dms loop")
         dms_thread = threading.Thread(target=run_dms_loop,
-                                      args=(device_id, callback, stop_event, publish_event, settings))
+                                      args=(device_id, callback, stop_event, settings))
         threads[device_id] = stop_event
         print(device_id + " sumilator started")
         dms_thread.start()

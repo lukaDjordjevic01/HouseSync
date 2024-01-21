@@ -1,6 +1,8 @@
 import threading
 import time
 import json
+from ...communication_credentials import *
+
 
 from paho.mqtt import publish
 
@@ -21,8 +23,7 @@ def publisher_task(event, batch):
             publish_data_counter = 0
             batch.clear()
 
-        print(local_dht_batch)
-        publish.multiple(local_dht_batch, hostname="localhost", port=1883)
+        publish.multiple(local_dht_batch, hostname=mqtt_host, port=mqtt_port)
         print(f'published {publish_data_limit} dus values')
         event.clear()
 
@@ -45,6 +46,8 @@ def callback(device_id, distance, publish_event, settings):
             "name": settings["name"],
             "value": distance
         }
+
+        publish.single("DUS", json.dumps(distance_payload), hostname=mqtt_host, port=mqtt_port)
 
         with counter_lock:
             dus_batch.append(('Distance', json.dumps(distance_payload), 0, True))

@@ -22,8 +22,6 @@ def publisher_task(event, dht_batch):
             dht_batch.clear()
         publish.multiple(local_dht_batch, hostname="localhost", port=1883)
         print(f'published {publish_data_limit} dht values')
-        for item in local_dht_batch:
-            print(item)
         event.clear()
 
 
@@ -33,16 +31,9 @@ publisher_thread.daemon = True
 publisher_thread.start()
 
 
-def callback(device_id, humidity, temperature, publish_event, settings, verbose=False):
+def callback(device_id, humidity, temperature, publish_event, settings):
     global publish_data_counter, publish_data_limit
 
-    if verbose:
-        t = time.localtime()
-        print("=" * 20)
-        print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
-        print(f"Device id: {device_id}")
-        print(f"Humidity: {humidity}%")
-        print(f"Temperature: {temperature}°C")
 
     temp_payload = {
         "measurement": "Temperature",
@@ -77,7 +68,6 @@ def run(device_id, threads, settings, stop_event, all_sensors=False):
         dht_thread = threading.Thread(target=run_dht_simulator,
                                       args=(device_id, 2, callback, stop_event, publish_event, settings))
         threads[device_id] = stop_event
-        print(device_id + " sumilator started")
         dht_thread.start()
         if not all_sensors:
             dht_thread.join()
