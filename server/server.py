@@ -1,3 +1,5 @@
+from datetime import datetime
+import threading
 import time
 
 from flask import Flask, request
@@ -39,6 +41,10 @@ ALARM_SYSTEM_IS_ACTIVE = False
 ALARM_IS_ON = False
 VALID_PIN = "1234#"
 PEOPLE_INSIDE = 0
+
+ALARM_CLOCK_TIME = time.time()
+ALARM_CLOCK_IS_ON = False
+ALARM_CLOCK_SYSTEM_IS_ON = False
 
 
 def on_connect(client, userdata, flags, rc):
@@ -150,6 +156,20 @@ def process_rpir(payload):
             turn_on_alarm(payload["device_id"])
 
 
+def check_alarm_clock():
+    global ALARM_CLOCK_IS_ON
+    while True:
+        current_time = f"{str(datetime.now().hour)}:{str(datetime.now().minute)}"
+        if ALARM_CLOCK_SYSTEM_IS_ON and current_time == ALARM_CLOCK_TIME:
+            ALARM_CLOCK_IS_ON = True
+            publish.single("alarm-clock",
+                           json.dumps({"is_on": True}),
+                           hostname=mqtt_host,
+                           port=mqtt_port)
+        time.sleep(60)
+
+
+
 @socketio.on('subscribe')
 def handle_subscribe(data):
     topic = data['topic']
@@ -216,6 +236,28 @@ def rpir():
                    port=mqtt_port)
     return json.dumps("")
 
+@app.route('/alarm-clock', methods=['post'])
+def alarm_clock():
+    global ALARM_CLOCK_TIME, ALARM_CLOCK_SYSTEM_IS_ON, ALARM_CLOCK_IS_ON
+    payload = request.get_json()
+    command = payload["command"]
+    if command == "setup":
+        alarm_clock_timestamp = datetime.fromtimestamp(payload["alarm_clock_timestamp"])
+        ALARM_CLOCK_TIME = f"{str(alarm_clock_timestamp.hour)}:{str(alarm_clock_timestamp.minute)}"
+        print(ALARM_CLOCK_TIME)
+    elif command == "system":
+        ALARM_CLOCK_SYSTEM_IS_ON = payload["is_on"]
+    else:
+        ALARM_CLOCK_IS_ON = False
+        publish.single("alarm-clock",
+                       json.dumps({"is_on": False}),
+                       hostname=mqtt_host,
+                       port=mqtt_port)
+
+    return json.dumps("")
+
 
 if __name__ == '__main__':
+    alarm_clock_thread = threading.Thread(target=check_alarm_clock)
+    alarm_clock_thread.start()
     socketio.run(app, debug=False, allow_unsafe_werkzeug=True)
