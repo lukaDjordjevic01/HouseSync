@@ -76,10 +76,13 @@ def buzz(device_id, pin, delay):
     time.sleep(delay)
     # GPIO.output(pin, False)
     time.sleep(delay)
-    publish.single("Alarm", json.dumps({
-        'command': 'notify',
-        "message": f"{device_id} buzzed",
-        "device_id": device_id
-    }))
     print(f"{device_id} buzzed")
+
+    if device_id == "DB":
+        payload = {
+            "message": "Security alarm is triggered.",
+            "command": "notify"
+        }
+        publish.single("Alarm", json.dumps(payload), hostname=mqtt_host, port=mqtt_port)
+
     time.sleep(2)

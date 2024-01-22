@@ -37,7 +37,8 @@ topics = ["Distance",
           "GLCD",
           "DPIR",
           "RPIR",
-          "BRGB"]
+          "BRGB",
+          "Alarm"]
 
 ALARM_SYSTEM_IS_ACTIVE = False
 ALARM_IS_ON = False
