@@ -8,8 +8,12 @@ from paho.mqtt import publish
 from ...communication_credentials import *
 
 
+last_color = "white"
+is_on = False
+
+
 def on_connect(client, userdata, flags, rc):
-    client.subscribe("BRGB")
+    client.subscribe("rgb-control")
 
 
 def set_up_mqtt(device_id, settings):
@@ -23,7 +27,7 @@ def set_up_mqtt(device_id, settings):
 
 def process_message(msg, device_id, settings):
     payload = json.loads(msg.payload.decode('utf-8'))
-    if msg.topic == device_id:
+    if msg.topic == "rgb-control":
         process_command(settings, payload['command'])
 
 
@@ -52,10 +56,24 @@ def run(device_id, threads, settings, stop_event, all_sensors=False):
 
 
 def process_command(settings, command):
+    global is_on, last_color
+    if command == "on_off":
+        is_on = not is_on
+        if is_on:
+            command = last_color
+        else:
+            command = "off"
+    else:
+        last_color = command
+
     if not settings["simulated"]:
         from sensor import change_color
         change_color[command](settings)
-    do_something[command]("aaaaaaaaaaaa")
+
+    publish.single(topic="BRGB",
+                   payload=json.dumps({"color": last_color, "is_on": is_on}),
+                   hostname=mqtt_host,
+                   port=mqtt_port)
 
 
 # rename later while working on it

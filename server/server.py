@@ -35,7 +35,8 @@ topics = ["Distance",
           "Rotation",
           "GLCD",
           "DPIR",
-          "RPIR"]
+          "RPIR",
+          "BRGB"]
 
 ALARM_SYSTEM_IS_ACTIVE = False
 ALARM_IS_ON = False
@@ -75,6 +76,8 @@ def process_message(msg):
         process_dpir(payload)
     elif topic == "RPIR":
         process_rpir(payload)
+    elif topic == "BRGB":
+        process_brgb(payload)
     else:
         save_to_db(payload)
 
@@ -149,6 +152,11 @@ def process_dpir(payload):
     print(PEOPLE_INSIDE)
 
 
+def process_brgb(payload):
+    print(payload)
+    socketio.emit('message', {'topic': "BRGB", 'message': payload}, room="BRGB")
+
+
 def process_rpir(payload):
     global PEOPLE_INSIDE, ALARM_SYSTEM_IS_ACTIVE, ALARM_IS_ON
     if PEOPLE_INSIDE == 0:
@@ -167,7 +175,6 @@ def check_alarm_clock():
                            hostname=mqtt_host,
                            port=mqtt_port)
         time.sleep(60)
-
 
 
 @socketio.on('subscribe')
@@ -236,6 +243,7 @@ def rpir():
                    port=mqtt_port)
     return json.dumps("")
 
+
 @app.route('/alarm-clock', methods=['post'])
 def alarm_clock():
     global ALARM_CLOCK_TIME, ALARM_CLOCK_SYSTEM_IS_ON, ALARM_CLOCK_IS_ON
@@ -254,6 +262,17 @@ def alarm_clock():
                        hostname=mqtt_host,
                        port=mqtt_port)
 
+    return json.dumps("")
+
+
+@app.route('/rgb-control', methods=['post'])
+def rgb_control():
+    payload = request.get_json()
+    command = payload["command"]
+    publish.single(topic="rgb-control",
+                   payload=json.dumps({"command": command}),
+                   hostname=mqtt_host,
+                   port=mqtt_port)
     return json.dumps("")
 
 
