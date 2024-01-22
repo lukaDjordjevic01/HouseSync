@@ -13,6 +13,7 @@ from simulators.settings.settings import load_settings
 from simulators.device.b4sd import core as b4sd
 from simulators.device.ir_receiver import core as ir_receiver
 
+
 def main():
     threads = {}
     settings = load_settings()
@@ -24,6 +25,7 @@ def main():
     # pir.run('BIR', threads, settings['BIR'], stop_event, True)
     rgb.run('BRGB', threads, settings['BRGB'], stop_event, True)
     ir_receiver.run('RECEIVER', threads, settings['RECEIVER'], stop_event, True)
+
 
 if __name__ == '__main__':
     main()
