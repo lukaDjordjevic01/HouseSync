@@ -1,3 +1,4 @@
+import math
 from datetime import datetime
 import threading
 import time
@@ -78,6 +79,8 @@ def process_message(msg):
         process_rpir(payload)
     elif topic == "BRGB":
         process_brgb(payload)
+    elif topic == "Acceleration":
+        process_acceleration(payload)
     else:
         save_to_db(payload)
 
@@ -136,7 +139,7 @@ def process_door(payload):
     if not locked:
         print("Uso")
         time.sleep(5)
-        if ALARM_SYSTEM_IS_ACTIVE and not ALARM_IS_ON:
+        if ALARM_SYSTEM_IS_ACTIVE:
             turn_on_alarm(payload["id"])
 
 
@@ -160,8 +163,17 @@ def process_brgb(payload):
 def process_rpir(payload):
     global PEOPLE_INSIDE, ALARM_SYSTEM_IS_ACTIVE, ALARM_IS_ON
     if PEOPLE_INSIDE == 0:
-        if ALARM_SYSTEM_IS_ACTIVE and not ALARM_IS_ON:
+        if ALARM_SYSTEM_IS_ACTIVE:
             turn_on_alarm(payload["device_id"])
+
+
+def process_acceleration(payload):
+    global ALARM_SYSTEM_IS_ACTIVE, ALARM_IS_ON
+    save_to_db(payload)
+    ax, ay, az = payload['value'].split()
+    magnitude = math.sqrt(float(ax) ** 2 + float(ay) ** 2)
+    if magnitude > 3 and ALARM_SYSTEM_IS_ACTIVE:
+        turn_on_alarm(payload["id"])
 
 
 def check_alarm_clock():
@@ -271,6 +283,15 @@ def rgb_control():
     command = payload["command"]
     publish.single(topic="rgb-control",
                    payload=json.dumps({"command": command}),
+                   hostname=mqtt_host,
+                   port=mqtt_port)
+    return json.dumps("")
+
+
+@app.route('/acceleration', methods=['post'])
+def acceleration():
+    publish.single(topic="GSG-scenario",
+                   payload=json.dumps({"command": "acceleration"}),
                    hostname=mqtt_host,
                    port=mqtt_port)
     return json.dumps("")
