@@ -65,7 +65,7 @@ export default function Navbar () {
                     
                 </Toolbar>
             </AppBar>
-            <div id="detail" style={{flex: '1 1 auto', width: "100%"}}>
+            <div id="detail" style={{flex: '1 1 auto', width: "100%", overflow: "auto"}}>
                 <Outlet/>
             </div>
         </div>

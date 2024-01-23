@@ -88,6 +88,11 @@ def callback(device_id, publish_event, settings):
                        json.dumps({"device_id": device_id}),
                        hostname=mqtt_host,
                        port=mqtt_port)
+    if device_id == "BIR":
+        publish.single(topic="rgb-control",
+                       payload=json.dumps({"command": "on_off"}),
+                       hostname=mqtt_host,
+                       port=mqtt_port)
 
     with counter_lock:
         pir_batch.append(('Movement', json.dumps(movement_payload), 0, True))

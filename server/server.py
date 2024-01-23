@@ -49,7 +49,6 @@ ALARM_CLOCK_TIME = time.time()
 ALARM_CLOCK_IS_ON = False
 ALARM_CLOCK_SYSTEM_IS_ON = False
 
-
 def on_connect(client, userdata, flags, rc):
     for topic in topics:
         print(topic)

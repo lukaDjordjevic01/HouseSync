@@ -36,7 +36,7 @@ def run_rgb_thread(device_id, settings, stop_event):
     if not settings["simulated"]:
         import RPi.GPIO as GPIO
         # set pins as outputs
-        GPIO.setup(settings["red_ping"], GPIO.OUT)
+        GPIO.setup(settings["red_pin"], GPIO.OUT)
         GPIO.setup(settings["green_pin"], GPIO.OUT)
         GPIO.setup(settings["blues_pin"], GPIO.OUT)
 

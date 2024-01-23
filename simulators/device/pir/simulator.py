@@ -34,5 +34,5 @@ def process_message(device_id, msg, callback, publish_event, settings):
 
 def run_pir_simulator(device_id, callback, stop_event, publish_event, settings):
     set_up_mqtt(device_id, callback, publish_event, settings)
-    while True:
+    while not stop_event.is_set():
         time.sleep(0.1)

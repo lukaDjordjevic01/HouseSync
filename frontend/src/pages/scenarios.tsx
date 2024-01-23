@@ -69,6 +69,18 @@ export default function Scenarios (){
     const handleRpirIdChange = (event: SelectChangeEvent) => {
         setRpirId(event.target.value);
     }
+
+    const handleGsgClick = () => {
+        axios.post<any>("http://localhost:5000/acceleration")
+            .then(res => {
+                if (res.status === 200) {
+                    console.log(res);
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
     
     const handleRpirClick = () => {
         axios.post<any>("http://localhost:5000/rpir", {device_id: rpirId})
@@ -270,6 +282,33 @@ export default function Scenarios (){
                           onClick={handleRpirClick}
                   >Trigger</Button>
                   
+              </Box>
+          </Box>
+
+
+          <Box sx={{
+              display: "flex",
+              flexDirection: "column",
+              width: "100%",
+              alignItems: "center",
+              gap: "10px"
+          }}>
+              <h2>GSG scenario</h2>
+              <Box sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: "100%",
+                  gap: "20px"
+              }}>
+
+                  <Button variant="contained" sx={{
+                      textTransform: "capitalize",
+                      width: "40%"
+                  }}
+                          onClick={handleGsgClick}
+                  >Simulate significant movement</Button>
+
               </Box>
           </Box>
       </Box>

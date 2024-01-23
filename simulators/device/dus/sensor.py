@@ -38,7 +38,7 @@ class DUS(object):
 
 
 def run_dus_loop(dus, device_id, callback, stop_event, publish_event, settings):
-    while True:
+    while not stop_event.is_set():
         distance = dus.get_distance()
         callback(device_id, distance, publish_event, settings)
         if stop_event.is_set():
