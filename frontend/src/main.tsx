@@ -10,6 +10,7 @@ import {toast, Toaster} from "react-hot-toast";
 import {io} from "socket.io-client";
 import {Howl} from 'howler';
 import Alarm from "./components/alarm.tsx";
+import BedroomAndGarage from "./pages/bedroom-and-garage.tsx";
 
 const theme = createTheme({
     palette: {
@@ -46,9 +47,11 @@ const router = createBrowserRouter([
         path:"/",
         element: <Navbar/>,
         children:[
+            {path:"/", element: <Devices/>},
             {path: "/alarms", element: <Alarms/>},
             {path: "/devices", element: <Devices/>},
             {path: "/scenarios", element: <Scenarios/>},
+            {path: "/bedroom-and-garage", element: <BedroomAndGarage/>},
         ]
     }
 ])

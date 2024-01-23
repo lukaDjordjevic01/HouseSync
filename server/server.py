@@ -49,6 +49,9 @@ ALARM_CLOCK_TIME = time.time()
 ALARM_CLOCK_IS_ON = False
 ALARM_CLOCK_SYSTEM_IS_ON = False
 
+BGRB_PAYLOAD = {"color": "white", "is_on": False}
+
+
 def on_connect(client, userdata, flags, rc):
     for topic in topics:
         print(topic)
@@ -156,7 +159,9 @@ def process_dpir(payload):
 
 
 def process_brgb(payload):
+    global BGRB_PAYLOAD
     print(payload)
+    BGRB_PAYLOAD = payload
     socketio.emit('message', {'topic': "BRGB", 'message': payload}, room="BRGB")
 
 
@@ -286,6 +291,11 @@ def rgb_control():
                    hostname=mqtt_host,
                    port=mqtt_port)
     return json.dumps("")
+
+
+@app.route('/rgb-state', methods=['get'])
+def rgb_state():
+    return json.dumps(BGRB_PAYLOAD)
 
 
 @app.route('/acceleration', methods=['post'])
