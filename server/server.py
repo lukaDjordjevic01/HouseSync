@@ -84,6 +84,8 @@ def process_message(msg):
         process_brgb(payload)
     elif topic == "Acceleration":
         process_acceleration(payload)
+    elif topic == "GLCD":
+        process_glcd(payload)
     else:
         save_to_db(payload)
 
@@ -179,6 +181,10 @@ def process_acceleration(payload):
     magnitude = math.sqrt(float(ax) ** 2 + float(ay) ** 2)
     if magnitude > 3 and ALARM_SYSTEM_IS_ACTIVE:
         turn_on_alarm(payload["id"])
+
+
+def process_glcd(payload):
+    socketio.emit('message', {'topic': "GLCD", 'message': payload}, room="BRGB")
 
 
 def check_alarm_clock():
