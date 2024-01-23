@@ -9,6 +9,7 @@ import Scenarios from "./pages/scenarios.tsx";
 import {toast, Toaster} from "react-hot-toast";
 import {io} from "socket.io-client";
 import {Howl} from 'howler';
+import Alarm from "./components/alarm.tsx";
 
 const theme = createTheme({
     palette: {
@@ -62,21 +63,7 @@ const handleAlarm = (data) => {
     });
     howl.play();
     toast.custom(
-        <Box sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "20px",
-            padding: "10px",
-            backgroundColor: "#DD3636",
-            width: "350px",
-            borderRadius: "5px"
-        }}>
-            <Typography fontSize="large">{data.message}</Typography>
-            <Button variant="outlined" sx={{
-                color: "#F2F2F2",
-                borderColor: "#F2F2F2"
-            }}>Turn off</Button>
-        </Box>
+        <Alarm data={data}/>
     )
 }
 socket.off('message', handleAlarm).on('message', handleAlarm);

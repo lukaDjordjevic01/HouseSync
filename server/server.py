@@ -298,6 +298,15 @@ def acceleration():
     return json.dumps("")
 
 
+@app.route('/web-alarm-off', methods=['post'])
+def web_alarm_off():
+    payload = request.get_json()
+    if payload["value"] != VALID_PIN:
+        return json.dumps({"message": "Invalid pin!"}), 400
+    process_pin(payload)
+    return json.dumps("")
+
+
 if __name__ == '__main__':
     alarm_clock_thread = threading.Thread(target=check_alarm_clock)
     alarm_clock_thread.start()
