@@ -9,11 +9,12 @@ from simulators.device.dus import core as dus
 from simulators.device.pir import core as pir
 from simulators.settings.settings import load_settings
 
+stop_event = threading.Event()
+
 
 def main():
     threads = {}
     settings = load_settings()
-    stop_event = threading.Event()
     ds.run('DS2', threads, settings['DS2'], stop_event, True)
     dus.run('DUS2', threads, settings['DUS2'], stop_event, True)
     pir.run('DPIR2', threads, settings['DPIR2'], stop_event, True)
@@ -25,6 +26,9 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
-    while True:
-        time.sleep(2)
+    try:
+        main()
+        while True:
+            time.sleep(2)
+    except KeyboardInterrupt:
+        stop_event.set()

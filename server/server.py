@@ -37,7 +37,8 @@ topics = ["Distance",
           "GLCD",
           "DPIR",
           "RPIR",
-          "BRGB"]
+          "BRGB",
+          "Alarm"]
 
 ALARM_SYSTEM_IS_ACTIVE = False
 ALARM_IS_ON = False
@@ -47,7 +48,6 @@ PEOPLE_INSIDE = 0
 ALARM_CLOCK_TIME = time.time()
 ALARM_CLOCK_IS_ON = False
 ALARM_CLOCK_SYSTEM_IS_ON = False
-
 
 def on_connect(client, userdata, flags, rc):
     for topic in topics:
@@ -294,6 +294,15 @@ def acceleration():
                    payload=json.dumps({"command": "acceleration"}),
                    hostname=mqtt_host,
                    port=mqtt_port)
+    return json.dumps("")
+
+
+@app.route('/web-alarm-off', methods=['post'])
+def web_alarm_off():
+    payload = request.get_json()
+    if payload["value"] != VALID_PIN:
+        return json.dumps({"message": "Invalid pin!"}), 400
+    process_pin(payload)
     return json.dumps("")
 
 

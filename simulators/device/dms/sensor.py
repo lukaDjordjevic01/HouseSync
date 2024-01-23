@@ -3,6 +3,7 @@ import time
 
 import keyboard
 
+pin = ""
 
 def setup(settings):
     GPIO.setwarnings(False)
@@ -20,29 +21,28 @@ def setup(settings):
 
 
 def read_line(line, characters, settings, callback, device_id, publish_event):
+    global pin
     GPIO.output(line, GPIO.HIGH)
     if GPIO.input(settings['C1']) == 1:
-        callback(device_id, characters[0], publish_event, settings)
+        pin += characters[0]
     if GPIO.input(settings['C2']) == 1:
-        callback(device_id, characters[1], publish_event, settings)
+        pin += characters[1]
     if GPIO.input(settings['C3']) == 1:
-        callback(device_id, characters[2], publish_event, settings)
+        pin += characters[2]
+        if characters[2] == "#":
+            callback(device_id, pin, publish_event, settings)
+            pin = ""
     if GPIO.input(settings['C4']) == 1:
-        callback(device_id, characters[3], publish_event, settings)
+        pin += characters[3]
     GPIO.output(line, GPIO.LOW)
 
 
 def run_dms_loop(device_id, callback, stop_event, publish_event, settings):
-    def on_key_event(e):
-        if e.name == 'x' and e.event_type == keyboard.KEY_DOWN:
-            stop_event.set()
-
-    keyboard.hook(on_key_event)
 
     print(device_id + " loop started.")
     setup(settings)
 
-    while True:
+    while not stop_event.is_set():
         read_line(settings['R1'], ["1", "2", "3", "A"], settings, callback, device_id, publish_event)
         read_line(settings['R2'], ["4", "5", "6", "B"], settings, callback, device_id, publish_event)
         read_line(settings['R3'], ["7", "8", "9", "C"], settings, callback, device_id, publish_event)
