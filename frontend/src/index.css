@@ -1,0 +1,46 @@
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+
+:root {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  min-width: 320px;
+  min-height: 100vh;
+  overflow: hidden;
+  width: 100vw;
+
+}
+
+h4 {
+  margin: 0;
+}
+
+#logo:hover {
+  cursor: pointer;
+}
+
+*::-webkit-scrollbar {
+  width: 15px; /* For Webkit browsers like Chrome and Safari - Adjust width as needed */
+
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #4D4D4D; /* For Webkit browsers - Replace with your thumb color */
+  border-radius: 5px;
+}
+
+*::-webkit-scrollbar-track {
+  background-color: #1E1E1E; /* For Webkit browsers - Replace with your track color */
+}

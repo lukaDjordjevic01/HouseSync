@@ -1,0 +1,166 @@
+{
+    "RDHT1": {
+        "simulated": true,
+        "pin": 17,
+        "runs_on": "PI1",
+        "name": "Room DHT"
+    },
+    "RDHT2": {
+        "simulated": true,
+        "pin": 18,
+        "runs_on": "PI1",
+        "name": "Room DHT"
+    },
+    "DPIR1": {
+        "simulated": true,
+        "pin": 19,
+        "runs_on": "PI1",
+        "name": "Door PIR"
+    },
+    "RPIR1": {
+        "simulated": true,
+        "pin": 19,
+        "runs_on": "PI1",
+        "name": "Room PIR"
+    },
+    "RPIR2": {
+        "simulated": true,
+        "pin": 19,
+        "runs_on": "PI1",
+        "name": "Room PIR"
+    },
+    "DMS": {
+        "simulated": true,
+        "R1": 18,
+        "R2": 18,
+        "R3": 18,
+        "R4": 18,
+        "C1": 18,
+        "C2": 18,
+        "C3": 18,
+        "C4": 18,
+        "runs_on": "PI1",
+        "name": "Door membrane switch"
+    },
+    "DL": {
+        "simulated": true,
+        "pin": 18,
+        "runs_on": "PI1",
+        "name": "Door light"
+    },
+    "DB": {
+        "simulated": true,
+        "pin": 25,
+        "runs_on": "PI1",
+        "name": "Door buzzer"
+    },
+    "DUS1": {
+        "simulated": true,
+        "trig_pin": 18,
+        "echo_pin": 19,
+        "runs_on": "PI1",
+        "name": "Door Ultrasonic Sensor"
+    },
+    "DS1": {
+        "simulated": true,
+        "pin": 18,
+        "runs_on": "PI1",
+        "name": "Door sensor"
+    },
+
+    "DS2": {
+        "simulated": true,
+        "pin": 18,
+        "runs_on": "PI2",
+        "name": "Door sensor"
+    },
+    "DUS2": {
+        "simulated": true,
+        "trig_pin": 18,
+        "echo_pin": 19,
+        "runs_on": "PI2",
+        "name": "Door Ultrasonic Sensor"
+    },
+    "DPIR2": {
+        "simulated": true,
+        "pin": 19,
+        "runs_on": "PI2",
+        "name": "Door PIR"
+    },
+    "GDHT": {
+        "simulated": true,
+        "pin": 17,
+        "runs_on": "PI2",
+        "name": "Garage DHT"
+    },
+    "RPIR3": {
+        "simulated": true,
+        "pin": 19,
+        "runs_on": "PI2",
+        "name": "Door PIR"
+    },
+    "RDHT3": {
+        "simulated": true,
+        "pin": 17,
+        "runs_on": "PI2",
+        "name": "Room DHT"
+    },
+
+    "RPIR4": {
+        "simulated": true,
+        "pin": 19,
+        "runs_on": "PI3",
+        "name": "Room PIR"
+    },
+    "RDHT4": {
+        "simulated": true,
+        "pin": 17,
+        "runs_on": "PI3",
+        "name": "Room DHT"
+    },
+    "BIR": {
+        "simulated": true,
+        "pin": 19,
+        "runs_on": "PI3",
+        "name": "Bedroom PIR"
+    },
+    "BB": {
+        "simulated": true,
+        "pin": 25,
+        "runs_on": "PI3"
+    },
+    "GSG": {
+        "simulated": true,
+        "runs_on": "PI2",
+        "name": "Gun safe gyro"
+    },
+    "GLCD": {
+        "simulated": true,
+        "runs_on": "PI2",
+        "name": "Garage LCD",
+        "pin_rs": 25,
+        "pin_e": 24,
+        "pins_db": [23, 17, 21, 22]
+    },
+    "BRGB": {
+        "simulated": true,
+        "red_pin": 12,
+        "green_pin": 13,
+        "blue_pin": 15,
+        "runs_on": "PI3",
+        "name": "Bedroom RGB"
+    },
+    "B4SD": {
+        "simulated": true,
+        "segments": [11,4,23,8,7,10,18,25],
+        "digits": [22,27,17,24],
+        "runs_on": "PI3",
+        "name": "4 digit 7 segment display"
+    },
+    "RECEIVER": {
+        "simulated": true,
+        "pin": 17,
+        "runs_on": "PI3",
+        "name": "Light remote"
+    }
+}

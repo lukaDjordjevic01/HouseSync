@@ -1,0 +1,8 @@
+ipconfig --> nas wifi
+
+ssh username@hostname_or_ip_address --> konekcija na pi
+
+scp -r your_directory username@hostname_or_ip_address:/path/to/destination_directory --> prenos podataka
+
+
+u communication credentials na srveru dodati hosta za pi
