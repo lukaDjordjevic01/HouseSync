@@ -38,6 +38,7 @@ topics = ["Distance",
           "DPIR",
           "RPIR",
           "BRGB",
+          "B4SD",
           "Alarm"]
 
 ALARM_SYSTEM_IS_ACTIVE = False
@@ -45,11 +46,14 @@ ALARM_IS_ON = False
 VALID_PIN = "1234#"
 PEOPLE_INSIDE = 0
 
-ALARM_CLOCK_TIME = time.time()
+ALARM_CLOCK_TIME = "Not set"
 ALARM_CLOCK_IS_ON = False
 ALARM_CLOCK_SYSTEM_IS_ON = False
+ALARM_CLOCK_PAYLOAD = {"time": ALARM_CLOCK_TIME, "system_is_on": ALARM_CLOCK_SYSTEM_IS_ON}
 
 BGRB_PAYLOAD = {"color": "white", "is_on": False}
+
+B4SD_TIME = ""
 
 
 def on_connect(client, userdata, flags, rc):
@@ -82,6 +86,8 @@ def process_message(msg):
         process_rpir(payload)
     elif topic == "BRGB":
         process_brgb(payload)
+    elif topic == "B4SD":
+        process_b4sd(payload)
     elif topic == "Acceleration":
         process_acceleration(payload)
     elif topic == "GLCD":
@@ -173,6 +179,12 @@ def process_brgb(payload):
     socketio.emit('message', {'topic': "BRGB", 'message': payload}, room="BRGB")
 
 
+def process_b4sd(payload):
+    global B4SD_TIME
+    B4SD_TIME = payload['time']
+    socketio.emit('message', {'topic': "B4SD", 'message': payload}, room="B4SD")
+
+
 def process_rpir(payload):
     global PEOPLE_INSIDE, ALARM_SYSTEM_IS_ACTIVE, ALARM_IS_ON
     if PEOPLE_INSIDE == 0:
@@ -190,7 +202,7 @@ def process_acceleration(payload):
 
 
 def process_glcd(payload):
-    socketio.emit('message', {'topic': "GLCD", 'message': payload}, room="BRGB")
+    socketio.emit('message', {'topic': "GLCD", 'message': payload}, room="GLCD")
 
 
 def check_alarm_clock():
@@ -204,6 +216,14 @@ def check_alarm_clock():
                            hostname=mqtt_host,
                            port=mqtt_port)
         time.sleep(60)
+
+
+def alarm_clock_notify():
+    global ALARM_CLOCK_IS_ON
+    while True:
+        if ALARM_CLOCK_IS_ON:
+            socketio.emit('message', {'topic': "Alarm-clock", 'message': {"is_on": True}}, room="Alarm-clock")
+        time.sleep(3)
 
 
 @socketio.on('subscribe')
@@ -275,23 +295,30 @@ def rpir():
 
 @app.route('/alarm-clock', methods=['post'])
 def alarm_clock():
-    global ALARM_CLOCK_TIME, ALARM_CLOCK_SYSTEM_IS_ON, ALARM_CLOCK_IS_ON
+    global ALARM_CLOCK_TIME, ALARM_CLOCK_SYSTEM_IS_ON, ALARM_CLOCK_IS_ON, ALARM_CLOCK_PAYLOAD
     payload = request.get_json()
     command = payload["command"]
     if command == "setup":
-        alarm_clock_timestamp = datetime.fromtimestamp(payload["alarm_clock_timestamp"])
-        ALARM_CLOCK_TIME = f"{str(alarm_clock_timestamp.hour)}:{str(alarm_clock_timestamp.minute)}"
+        alarm_clock_timestamp = datetime.fromtimestamp(payload["alarm_clock_timestamp"] / 1000)
+        hour = str(alarm_clock_timestamp.hour)
+        if len(hour) == 1:
+            hour = "0" + hour
+        minute = str(alarm_clock_timestamp.minute)
+        if len(minute) == 1:
+            minute = "0" + minute
+        ALARM_CLOCK_TIME = f"{hour}:{minute}"
+        ALARM_CLOCK_PAYLOAD["time"] = ALARM_CLOCK_TIME
         print(ALARM_CLOCK_TIME)
     elif command == "system":
         ALARM_CLOCK_SYSTEM_IS_ON = payload["is_on"]
+        ALARM_CLOCK_PAYLOAD["system_is_on"] = ALARM_CLOCK_SYSTEM_IS_ON
     else:
         ALARM_CLOCK_IS_ON = False
         publish.single("alarm-clock",
                        json.dumps({"is_on": False}),
                        hostname=mqtt_host,
                        port=mqtt_port)
-
-    return json.dumps("")
+    return json.dumps(ALARM_CLOCK_PAYLOAD)
 
 
 @app.route('/rgb-control', methods=['post'])
@@ -338,7 +365,23 @@ def web_alarm_off():
     return json.dumps("")
 
 
+@app.route('/get-time', methods=['get'])
+def get_time():
+    global B4SD_TIME
+    return json.dumps({"time": B4SD_TIME})
+
+
+@app.route('/get-alarm-clock', methods=['get'])
+def get_alarm_clock():
+    global ALARM_CLOCK_PAYLOAD, ALARM_CLOCK_TIME, ALARM_CLOCK_SYSTEM_IS_ON
+    ALARM_CLOCK_PAYLOAD["time"] = ALARM_CLOCK_TIME
+    ALARM_CLOCK_PAYLOAD["system_is_on"] = ALARM_CLOCK_SYSTEM_IS_ON
+    return json.dumps(ALARM_CLOCK_PAYLOAD)
+
+
 if __name__ == '__main__':
     alarm_clock_thread = threading.Thread(target=check_alarm_clock)
     alarm_clock_thread.start()
+    alarm_clock_notify_thread = threading.Thread(target=alarm_clock_notify)
+    alarm_clock_notify_thread.start()
     socketio.run(app, debug=False, allow_unsafe_werkzeug=True)

@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom/client'
 import './index.css'
-import {Box, Button, createTheme, CssBaseline, ThemeProvider, Typography} from "@mui/material";
+import {createTheme, CssBaseline, ThemeProvider} from "@mui/material";
 import {RouterProvider, createBrowserRouter} from "react-router-dom";
 import Navbar from "./components/navbar.tsx";
 import Alarms from "./pages/alarms.tsx";
@@ -11,6 +11,9 @@ import {io} from "socket.io-client";
 import {Howl} from 'howler';
 import Alarm from "./components/alarm.tsx";
 import BedroomAndGarage from "./pages/bedroom-and-garage.tsx";
+import {LocalizationProvider} from "@mui/x-date-pickers";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import AlarmClock from "./components/alarm-clock.tsx";
 
 const theme = createTheme({
     palette: {
@@ -20,8 +23,8 @@ const theme = createTheme({
             contrastText: "#F2F2F2"
         },
         secondary: {
-            main: "#F5F5F5",
-            contrastText: '#4D4D4D'
+            main: '#F2F2F2',
+            contrastText: "#F2F2F2"
         },
         error: {
             main: "#DD3636"
@@ -57,25 +60,37 @@ const router = createBrowserRouter([
 ])
 
 const socket = io('http://localhost:5000');
-const topic: string = "Alarm";
-socket.emit('subscribe', { topic });
+socket.emit('subscribe', { topic: "Alarm" });
+socket.emit('subscribe', { topic: "Alarm-clock" });
 
 const handleAlarm = (data) => {
     const howl = new Howl({
         src: ["src/assets/alarm_beep.mp3"]
     });
-    howl.play();
-    toast.custom(
-        <Alarm data={data}/>
-    )
+
+    if (data.topic == "Alarm") {
+        howl.play();
+        toast.custom(
+            <Alarm data={data}/>
+        )
+    }
+    if (data.topic == "Alarm-clock") {
+        howl.play();
+        toast.custom(
+            <AlarmClock/>
+        )
+    }
+
 }
 socket.off('message', handleAlarm).on('message', handleAlarm);
 
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <ThemeProvider theme={theme} >
-        <CssBaseline/>
-        <RouterProvider router={router}/>
-        <Toaster position="bottom-right"/>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <CssBaseline/>
+            <RouterProvider router={router}/>
+            <Toaster position="bottom-right"/>
+        </LocalizationProvider>
     </ThemeProvider>
 )
