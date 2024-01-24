@@ -55,6 +55,12 @@ export default function Navbar () {
                               textTransform: "capitalize",
                               color: "#F5F5F5"
                             }}>Scenarios</Button>
+
+                    <Button onClick={() => navigate('/bedroom-and-garage')}
+                            sx={{
+                                textTransform: "capitalize",
+                                color: "#F5F5F5"
+                            }}>Bedroom and garage</Button>
                     
                     <Typography
                         sx={{

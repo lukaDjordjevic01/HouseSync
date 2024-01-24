@@ -74,12 +74,7 @@ def callback(device_id, display_data, publish_event, settings):
         "value": display_data
     }
 
-    with counter_lock:
-        lcd_batch.append(('GLCD', json.dumps(payload), 0, True))
-        publish_data_counter += 1
-
-    if publish_data_counter >= publish_data_limit:
-        publish_event.set()
+    publish.single("GLCD", payload=json.dumps({"display_data": display_data}), hostname=mqtt_host, port=mqtt_port)
 
 
 def run_lcd_thread(device_id, delay, settings, stop_event):
@@ -91,7 +86,7 @@ def run_lcd_thread(device_id, delay, settings, stop_event):
             lcd = Adafruit_CharLCD(settings['pin_rs'], settings['pin_e'], settings['pins_db'])
             lcd.clear()
             lcd.message(message)
-        # callback(device_id, message, publish_event, settings)
+        callback(device_id, message, publish_event, settings)
         time.sleep(delay)
 
 
