@@ -2,24 +2,58 @@ import {AppBar, Button, Toolbar, Typography} from "@mui/material";
 import {Outlet, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {io} from "socket.io-client";
+import axios from "axios";
 
 export default function Navbar () {
     const navigate = useNavigate()
-    
+
     const [peopleInside, setPeopleInside] = useState<number>(0);
+    const [alarmSystemIsActive, setAlarmSystemIsActive] = useState<boolean>(false);
+
+    const getPeopleInside = () => {
+        axios.get<PeopleInside>("http://localhost:5000/people-inside")
+            .then(res => {
+                if (res.status === 200) {
+                    setPeopleInside(res.data.people_inside);
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    };
+    const getAlarmSystemIsActive = () => {
+        axios.get<AlarmSystemIsActive>("http://localhost:5000/alarm-system-is-active")
+            .then(res => {
+                if (res.status === 200) {
+                    setAlarmSystemIsActive(res.data.alarm_system_is_active);
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    };
     
     useEffect(() => {
+
+        getPeopleInside();
+        getAlarmSystemIsActive();
+
         const socket = io('http://localhost:5000');
-        const topic: string = "people-inside";
-        socket.emit('subscribe', { topic });
-        
-        const handlePeopleInside = (data) => {
-            setPeopleInside(data.message.people_inside);
+        socket.emit('subscribe', { topic: "people-inside"});
+        socket.emit('subscribe', { topic: "alarm-system-activation" });
+
+        const handleMessage = (data) => {
+            if (data.topic === "people-inside"){
+                setPeopleInside(data.message.people_inside);
+            } else if (data.topic === "alarm-system-activation") {
+                setAlarmSystemIsActive(data.message.alarm_system_is_active);
+            }
         }
-        socket.off('message', handlePeopleInside).on('message', handlePeopleInside);
+        socket.off('message', handleMessage).on('message', handleMessage);
         
         return () => {
-            socket.emit('unsubscribe', { topic });
+            socket.emit('unsubscribe', { topic: "people-inside" });
+            socket.emit('unsubscribe', { topic: "alarm-system-activation" });
             console.log("Unmounted")
             socket.disconnect();
         };
@@ -67,7 +101,8 @@ export default function Navbar () {
                             flexGrow: "1",
                             textAlign: "right"
                         }}
-                    >People inside the house: {peopleInside}</Typography>
+                    >People inside the house: {peopleInside}, Alarm system: {alarmSystemIsActive ? "Active"
+                        : "Inactive"}</Typography>
                     
                 </Toolbar>
             </AppBar>
@@ -76,4 +111,12 @@ export default function Navbar () {
             </div>
         </div>
     )
+}
+
+interface PeopleInside {
+    people_inside: number
+}
+
+interface AlarmSystemIsActive {
+    alarm_system_is_active: boolean
 }

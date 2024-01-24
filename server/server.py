@@ -111,12 +111,18 @@ def process_pin(payload):
         turn_off_alarm(payload["id"])
         publish.single("Alarm", json.dumps({"command": "deactivate"}), hostname=mqtt_host, port=mqtt_port)
         ALARM_SYSTEM_IS_ACTIVE = False
+        socketio.emit('message',
+                      {'topic': 'alarm-system-activation', 'message': {'alarm_system_is_active': False}},
+                      room='alarm-system-activation')
     elif ALARM_SYSTEM_IS_ACTIVE and VALID_PIN != payload['value']:
         turn_on_alarm(payload["id"])
     elif not ALARM_SYSTEM_IS_ACTIVE and VALID_PIN == payload['value']:
         time.sleep(10)
         publish.single("Alarm", json.dumps({"command": "activate"}), hostname=mqtt_host, port=mqtt_port)
         ALARM_SYSTEM_IS_ACTIVE = True
+        socketio.emit('message',
+                      {'topic': 'alarm-system-activation', 'message': {'alarm_system_is_active': True}},
+                      room='alarm-system-activation')
         print("Aktiviran alarm")
     elif not ALARM_SYSTEM_IS_ACTIVE and VALID_PIN != payload['value']:
         print("Dobio sa weba!!!")
@@ -311,6 +317,16 @@ def acceleration():
                    hostname=mqtt_host,
                    port=mqtt_port)
     return json.dumps("")
+
+
+@app.route('/people-inside', methods=['GET'])
+def people_inside():
+    return json.dumps({"people_inside": PEOPLE_INSIDE})
+
+
+@app.route('/alarm-system-is-active', methods=['GET'])
+def alarm_system_is_active():
+    return json.dumps({"alarm_system_is_active": ALARM_SYSTEM_IS_ACTIVE})
 
 
 @app.route('/web-alarm-off', methods=['post'])

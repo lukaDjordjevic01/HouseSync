@@ -22,4 +22,7 @@ export function getGrafanaURL(deviceId: string, measurement: string, from="now-1
         return  "http://localhost:3000/d-solo/ce656564-eee0-4afc-9131-027b50a2ed77" +
             "/house-sync-dashboard?orgId=1&refresh=5s&from=" + from + "&to=now&panelId=6&" +
             "var-gsgMeasurement=" + measurement
+    else if (deviceId.includes("ALARMS"))
+        return  "http://localhost:3000/d-solo/ce656564-eee0-4afc-9131-027b50a2ed77/house-sync-dashboard?orgId=1&" +
+            "refresh=5s&tab=query&from=" + from + "&to=now&panelId=7"
 }
