@@ -14,6 +14,8 @@ from simulators.device.b4sd import core as b4sd
 from simulators.device.ir_receiver import core as ir_receiver
 
 stop_event = threading.Event()
+
+
 def main():
     threads = {}
     settings = load_settings()
