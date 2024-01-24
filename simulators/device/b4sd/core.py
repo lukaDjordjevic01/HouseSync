@@ -73,7 +73,7 @@ def run_b4sd_thread(device_id, settings, stop_event):
         else:
             print(s)
             time.sleep(2)
-        publish.single("B4SD", json.dumps({"time": f"{s[0]}{s[1]}:{s[2]}{s[3]}"}))
+        publish.single("B4SD", json.dumps({"time": f"{s[0]}{s[1]}:{s[2]}{s[3]}"}), hostname=mqtt_host, port=mqtt_port)
 
     if settings["simulated"]:
         import RPi.GPIO as GPIO
