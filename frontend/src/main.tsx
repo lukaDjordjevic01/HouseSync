@@ -64,17 +64,20 @@ socket.emit('subscribe', { topic: "Alarm" });
 socket.emit('subscribe', { topic: "Alarm-clock" });
 
 const handleAlarm = (data) => {
-    const howl = new Howl({
-        src: ["src/assets/alarm_beep.mp3"]
-    });
 
     if (data.topic == "Alarm") {
+        const howl = new Howl({
+            src: ["src/assets/alarm_beep.mp3"]
+        });
         howl.play();
         toast.custom(
             <Alarm data={data}/>
         )
     }
     if (data.topic == "Alarm-clock") {
+        const howl = new Howl({
+            src: ["src/assets/alarm-clock.mp3"]
+        });
         howl.play();
         toast.custom(
             <AlarmClock/>
