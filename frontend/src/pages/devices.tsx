@@ -18,6 +18,16 @@ export default function Devices () {
 
     const [selectedDevice, setSelectedDevice] = useState<Device | null>(null);
 
+    const checkDevice = (): boolean => {
+        return !(selectedDevice.id.includes("BB") ||
+            selectedDevice.id.includes("DB") ||
+            selectedDevice.id.includes("B4SD") ||
+            selectedDevice.id.includes("LCD") ||
+            selectedDevice.id.includes("RGB") ||
+            selectedDevice.id.includes("RECEIVER")
+        )
+    }
+
     useEffect(() => {
         axios.get<Device[]>("http://localhost:5000/get-devices")
             .then(res => {
@@ -101,7 +111,7 @@ export default function Devices () {
                 </AccordionDetails>
             </Accordion>
 
-            <Dialog open={selectedDevice !== null} onClose={() => setSelectedDevice(null)} fullWidth
+            <Dialog open={selectedDevice !== null && checkDevice()} onClose={() => setSelectedDevice(null)} fullWidth
                 maxWidth={"md"}>
                 <DialogContent
                     sx={{

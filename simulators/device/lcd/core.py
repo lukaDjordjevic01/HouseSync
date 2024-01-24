@@ -51,7 +51,7 @@ def publisher_task(event, lcd_batch):
             local_lcd_batch = lcd_batch.copy()
             publish_data_counter = 0
             lcd_batch.clear()
-        publish.multiple(local_lcd_batch, hostname="localhost", port=1883)
+        publish.multiple(local_lcd_batch, hostname=mqtt_host, port=mqtt_port)
         print(f'published {publish_data_limit} dht values')
         event.clear()
 

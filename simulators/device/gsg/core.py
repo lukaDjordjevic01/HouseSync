@@ -4,6 +4,7 @@ import threading
 from paho.mqtt import publish
 
 from .simulator import run_gsg_simulator
+from ...communication_credentials import *
 
 
 gsg_batch = []
@@ -20,7 +21,7 @@ def publisher_task(event, gsg_batch):
             local_gsg_batch = gsg_batch.copy()
             publish_data_counter = 0
             gsg_batch.clear()
-        publish.multiple(local_gsg_batch, hostname="localhost", port=1883)
+        publish.multiple(local_gsg_batch, hostname=mqtt_host, port=mqtt_port)
         print(f'published {publish_data_limit} dht values')
         event.clear()
 
@@ -54,8 +55,6 @@ def callback(device_id, acceleration, rotation, publish_event, settings):
         "name": settings["name"],
         "value": ' '.join(map(str, rotation))
     }
-
-    #ako se detektuje znacajan pomeraj onda aktivirati alarm
 
     with counter_lock:
         gsg_batch.append(('Acceleration', json.dumps(acceleration_payload), 0, True))

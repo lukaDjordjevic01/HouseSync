@@ -11,6 +11,8 @@ publish_data_counter = 0
 publish_data_limit = 5
 counter_lock = threading.Lock()
 
+from ...communication_credentials import *
+
 
 def publisher_task(event, dht_batch):
     global publish_data_counter, publish_data_limit
@@ -20,7 +22,7 @@ def publisher_task(event, dht_batch):
             local_dht_batch = dht_batch.copy()
             publish_data_counter = 0
             dht_batch.clear()
-        publish.multiple(local_dht_batch, hostname="localhost", port=1883)
+        publish.multiple(local_dht_batch, hostname=mqtt_host, port=mqtt_port)
         print(f'published {publish_data_limit} dht values')
         event.clear()
 

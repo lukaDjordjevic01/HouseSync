@@ -7,7 +7,7 @@ export function getGrafanaURL(deviceId: string, measurement: string, from="now-1
         return  "http://localhost:3000/d-solo/ce656564-eee0-4afc-9131-027b50a2ed77" +
             "/house-sync-dashboard?orgId=1&refresh=5s&from=" + from + "&to=now&panelId=4" +
             "&var-dsDeviceId=" + deviceId
-    else if (deviceId.includes("PIR"))
+    else if (deviceId.includes("PIR") || deviceId.includes("BIR"))
         return  "http://localhost:3000/d-solo/ce656564-eee0-4afc-9131-027b50a2ed77" +
             "/house-sync-dashboard?orgId=1&refresh=5s&from=" + from + "&to=now&panelId=3&" +
             "var-pirDeviceId=" + deviceId

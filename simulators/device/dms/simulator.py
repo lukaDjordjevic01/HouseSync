@@ -31,8 +31,8 @@ def process_message(msg, device_id, callback, settings):
             callback(device_id, "5678#", settings)
 
 
-def generate_password(scenario):
-    pass
+# def generate_password(scenario):
+#     pass
     # password = ""
     # characters = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
     #

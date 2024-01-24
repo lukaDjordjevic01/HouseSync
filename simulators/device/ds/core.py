@@ -19,8 +19,6 @@ def callback(device_id, locked, settings):
         "value": locked
     }
 
-    #meriti vreme od prethodnog callbacka i onda ukljuciti alarm ako treba
-    # ako se ukljucio alarm, kad stigner signal za zakljucavanje iskljuciti alarm
     publish.single("Door", json.dumps(payload), hostname=mqtt_host, port=mqtt_port)
 
 
